@@ -1,15 +1,26 @@
 # Quick Start Guide
 
-End-to-end workflow using Anya-SDD v0.4.0.
+End-to-end workflow using Anya-SDD v0.5.0.
 
 ## Setup
 
 ```bash
-cp -r anya-sdd /your-project/
+# 1. Copy the skills into your project
+git clone https://github.com/luisresendiz0/anya-ssd.git /tmp/anya-sdd
+cp -r /tmp/anya-sdd/.anya /your-project/
 cd /your-project
+
+# 2. Let your agent discover them (recommended)
+mkdir -p ~/.config/opencode/skills
+cp -r .anya/anya-* ~/.config/opencode/skills/
 ```
 
+Other harnesses: `.opencode/skills/`, `~/.claude/skills/`, `.agents/skills/`.
+Or skip the global install and point your agent at `.anya/` from `AGENTS.md`.
+
 ## Phase 1: Foundation
+
+Run these **once per project**.
 
 ### 1. Constitution
 
@@ -19,13 +30,13 @@ Need projects by client, time tracking, monthly reports, PDF invoicing.
 No real-time collaboration or payments.
 ```
 
-**Output:** `/anya/constitution.md`
+**Output:** `anya/constitution.md`
 
-Agent will:
-- Extract info from prompt
+The agent will:
+- Extract info from the prompt
 - Ask only what's missing
-- Flag doubts/contradictions
-- Request approval
+- Flag doubts and contradictions
+- Request approval before writing
 
 ### 2. Stack
 
@@ -34,13 +45,29 @@ Agent will:
 React + Tailwind frontend. Unit + E2E tests.
 ```
 
-**Output:** `/anya/stack.md`
+**Output:** `anya/stack.md`
 
-Agent will:
-- Ask project type if unclear
-- Ask missing items (ORM, deployment, etc.)
-- Validate against constitution
-- Request approval
+The agent will:
+- Ask the project type if it isn't clear
+- Ask missing items (ORM, deployment, testing…)
+- Derive test tools from **your** ecosystem — never assume one
+- Record the **exact command** to run each test suite
+- Validate against the constitution
+
+**Example testing block:**
+
+```markdown
+## Testing Strategy
+- **Unit tests:** yes
+  - Tool: <tool for your ecosystem>
+  - Command: `<exact command>`
+- **E2E tests:** yes
+  - Tool: <tool for your ecosystem>
+  - Command: `<exact command>`
+```
+
+If the project has no tests, say so. Downstream skills will skip that check
+instead of inventing one.
 
 ### 3. Plan
 
@@ -48,73 +75,71 @@ Agent will:
 /anya-plan
 ```
 
-**Output:** `/anya/plan.md`
+**Output:** `anya/plan.md`
 
-Agent will:
-- Analyze constitution + stack
+The agent will:
+- Read the constitution and stack
 - Propose phases with specs
-- Ensure logical order
+- Ensure a logical order (dependencies first)
 - Request approval
 
 **Example output:**
+
 ```markdown
-Phase 1: Foundations
+### Phase 1: Foundations
 1. auth-basic - JWT setup
 2. login - User login
 
-Phase 2: Core
+### Phase 2: Core
 3. dashboard - Main view
 4. client-crud - Client management
 5. project-crud - Project management
 6. task-crud - Task management
 7. timer - Time tracking
 
-Phase 3: Value
+### Phase 3: Value
 8. reports - Monthly reports
 9. invoicing - PDF invoicing
 ```
 
 ## Phase 2: Iteration
 
-### 4. Generate Spec
+Repeat for **every spec**.
+
+### 4. Generate a spec
 
 ```bash
 /anya-spec next
 ```
 
-**Output:** `/anya/specs/<name>.md`
+**Output:** `anya/specs/<name>.md`
 
-Agent will:
-- Identify next pending spec
-- Decide Mini-Spec vs Full-Spec
-- Generate spec
-- Request approval
+The agent will:
+- Identify the next pending spec
+- Decide Mini-Spec (3 sections) or Full-Spec (9 sections)
+- Generate it and request approval
 
-**Mini-Spec** (simple): 3 sections (Context, Criteria, NOT include)
-**Full-Spec** (complex): 9 sections (full detail)
-
-### 5. Generate Tasks
+### 5. Generate tasks
 
 ```bash
 /anya-task <spec-name>
 ```
 
-**Output:** `/anya/specs/<name>.tasks.md`
+**Output:** `anya/specs/<name>.tasks.md`
 
-Agent will:
-- Decompose spec into tasks
-- Each task: 1 session, specific file, explicit dependencies
-- Request approval
+Each task gets:
+- A clear action
+- The file(s) to create or modify
+- Explicit dependencies
 
-**Example output:**
+**Example:**
+
 ```markdown
-## Tasks
-
 - [ ] **Task 1:** Create User model
   - File: `src/models/user.ts`
   - Dependencies: None
 
-- [ ] **Task 2:** Implement hashPassword
+- [ ] **Task 2:** Implement password hashing
   - File: `src/utils/password.ts`
   - Dependencies: Task 1
 
@@ -129,41 +154,39 @@ Agent will:
 /anya-implement <spec-name>
 ```
 
-**Output:** Project code + updated plan
+The agent will:
+- Execute tasks **one at a time**
+- Mark each task `[x]` immediately and show partial progress (`3/8`)
+- Validate against spec, stack, and constitution
+- Run the test commands declared in `stack.md` (if any)
+- Run `/anya-verify` automatically
+- Show progress and suggest future specs
 
-Agent will:
-- Execute tasks in order
-- Mark tasks complete
-- Validate against spec/stack/constitution
-- Run automatic verification
-- Show progress
-- Suggest future specs (if risks/improvements)
+**Example verification output:**
 
-**Verification output:**
 ```
-✓ Spec completed: login.md
+Spec completed: login.md
 
-Verification:
-  ✓ Tasks: 8/8
-  ✓ Spec: 5/5 requirements met
-  ✓ Stack: consistent
-  ✓ Constitution: consistent
-  ✓ Tests: 6/6 pass
+Verification
+  Level 1  Tasks          8/8
+  Level 2  Spec           5/5 requirements met
+  Level 3  Stack          consistent
+  Level 4  Constitution   consistent
+  Level 5  Tests          6/6 pass
 
-⚠ Risks: 1
-💡 Improvements: 2
+Risks: 1    Improvements: 2
 
-Suggested Specs:
-1. Rate limiting → /anya-spec global rate limiting for auth endpoints...
-2. Login logging → /anya-spec logging all login attempts...
+Suggested Specs
+1. Rate limiting      → /anya-spec global rate limiting for auth endpoints...
+2. Login logging      → /anya-spec logging all login attempts...
 
-Progress:
-  ✓ auth-basic.md
-  ✓ login.md ← just finished
-  ○ register.md (next)
-
-Continue? (yes/no)
+Progress
+  auth-basic.md   done
+  login.md        just finished
+  register.md     next
 ```
+
+If `stack.md` declares no testing, Level 5 is reported as `N/A`.
 
 ### 7. Repeat
 
@@ -173,51 +196,53 @@ Continue? (yes/no)
 /anya-implement <spec>
 ```
 
-Until plan is complete.
+Until the plan is complete.
 
 ## Common Scenarios
 
-### Generate specific spec
+### Generate a specific spec
 
 ```bash
 /anya-spec login
 ```
 
-### Generate multiple specs
+### Generate several specs
 
 ```bash
 /anya-spec next 3
 ```
 
-### Generate spec not in plan
+### Add a spec that isn't in the plan
 
 ```bash
 /anya-spec rate limiting for login, max 5 attempts in 15 min
 ```
 
-Agent will suggest updating plan.
+The agent asks what's missing to define it (scope, criteria, exclusions), generates
+the spec, and proposes updating the plan.
 
-### Update existing spec
+### Update an existing spec
 
 ```bash
 /anya-spec update login to include Google OAuth
 ```
 
-### Review broken implementation
+### Review a broken implementation
 
 ```bash
 /anya-implement review login
 ```
 
-Agent will diagnose in cascade:
-1. Tasks completed?
-2. Spec fulfilled?
-3. Stack consistent?
-4. Constitution respected?
+The agent diagnoses in cascade:
 
-Then propose surgical fix.
+1. Are all tasks completed?
+2. Does the implementation meet the spec?
+3. Is it consistent with the stack?
+4. Does it respect the constitution?
 
-### Re-verify spec
+Then it proposes a surgical fix — not a rewrite.
+
+### Re-verify a spec
 
 ```bash
 /anya-verify login
@@ -237,59 +262,63 @@ Then propose surgical fix.
 
 ## Change Management
 
-### Add new spec mid-project
+### Add a spec mid-project
 
 ```bash
 /anya-spec <description>
 ```
 
-Agent will suggest updating plan.
+The agent defines it with you and proposes a plan update.
 
-### Change constitution
+### Change the constitution
 
-1. Update `/anya/constitution.md` manually
+1. Update `anya/constitution.md` manually
 2. Re-run `/anya-plan` to re-evaluate
 3. Re-generate affected specs
 
-### Change stack
+### Change the stack
 
-1. Update `/anya/stack.md` manually
+1. Update `anya/stack.md` manually
 2. Re-generate affected specs
+
+Every artifact carries `> version: N · updated: YYYY-MM-DD`. Bump the version when
+you regenerate or expand it.
 
 ## Tips
 
 **Be specific in prompts:**
+
 ```bash
-# ❌ Vague
+# Vague
 /anya-constitution task app
 
-# ✅ Specific
+# Specific
 /anya-constitution Task manager for freelancers with multiple clients.
 Need projects by client, time tracking, monthly reports, PDF invoicing.
 No real-time collaboration or payments.
 ```
 
 **Use context when needed:**
+
 ```bash
 /anya-task login prioritize security over speed
 ```
 
 **Trust the pipeline:**
-- Each skill validates against previous outputs
-- Quality gates prevent bad propagation
-- Anti-patterns detected early
+- Each skill validates against the previous outputs
+- Gates catch contradictions early
+- Anti-patterns are listed in each skill's frontmatter
 
-**Don't skip foundation:**
-- Constitution → Stack → Plan (in order)
-- Each depends on the previous
-- Skipping causes rework
+**Don't skip the foundation:**
+- Constitution → Stack → Plan, in order
+- Skipping causes rework later
 
 ## Output Files
 
 ```
-/anya/
+anya/
 ├── constitution.md    # Vision, rules, scope
-├── stack.md           # Technologies + testing
+├── stack.md           # Technologies + testing + commands
 ├── plan.md            # Specs in phases
 └── specs/
     ├── auth-basic.md
@@ -303,6 +332,6 @@ All files are git-trackable and human-readable.
 
 ## Next Steps
 
-- Review [README.md](./README.md) for framework overview
-- Check [CHANGELOG.md](./CHANGELOG.md) for version history
-- Explore individual skill files for detailed instructions
+- [README.md](./README.md) — framework overview
+- [CHANGELOG.md](./CHANGELOG.md) — version history
+- Explore `.anya/<skill>/SKILL.md` for the full instructions

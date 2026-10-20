@@ -3,15 +3,15 @@ name: anya-plan
 role: Strategic Delivery Lead
 description: >
   Organizes specs into logical phases. Constitution and stack have priority over
-  user prompt. Generates /anya/plan.md. Activates when stack exists and user wants
+  user prompt. Generates anya/plan.md. Activates when stack exists and user wants
   to plan implementation.
-version: 0.4.0
+version: 0.5.0
 triggers:
   - user_intent: "plan implementation"
   - user_intent: "organize specs"
-  - context: "exists /anya/stack.md AND no /anya/plan.md"
-reads: [/anya/constitution.md, /anya/stack.md]
-writes: [/anya/plan.md]
+  - context: "exists anya/stack.md AND no anya/plan.md"
+reads: [anya/constitution.md, anya/stack.md]
+writes: [anya/plan.md]
 next: anya-spec
 gates:
   - "Plan coherent with constitution and stack"
@@ -21,9 +21,10 @@ gates:
   - "Covers all constitution features"
   - "Phases defined (1-N based on size)"
   - "Priority: constitution/stack > user prompt"
+  - "Version header bumped on re-plan or progress update"
 exit:
   - "User approves plan"
-  - "File created at /anya/plan.md"
+  - "File created at anya/plan.md"
 anti:
   - "Illogical order (reports before data)"
   - "Specs too large (>3 sessions) or small (trivial)"
@@ -50,8 +51,11 @@ If user says "user editing first, auth last" but constitution implies auth is ne
 
 ## Output Structure
 
+Format freely — this is a guide, not a template to copy verbatim.
+
 ```markdown
 # Project Plan
+> version: 1 · updated: <YYYY-MM-DD>
 
 ## Summary
 <Brief: plan logic and phase organization>
@@ -141,72 +145,5 @@ Each spec should be:
    - Missing specs?
    - Unnecessary specs?
 5. **Adjust** based on feedback
-6. **Generate** `/anya/plan.md`
+6. **Generate** `anya/plan.md`
 7. **Confirm** with user
-
-## Quality Gates
-
-- [ ] Coherent with constitution and stack
-- [ ] Specs in logical order (dependencies resolved)
-- [ ] Each spec has name + description
-- [ ] No duplicates
-- [ ] Covers all constitution features
-- [ ] Phases defined (1-N)
-- [ ] File created at `/anya/plan.md`
-
-## Examples
-
-### User Suggests Wrong Order
-```
-User: /anya-plan Start with user editing, then reports, auth last.
-
-Agent: Reading constitution and stack...
-
-Problem: Your constitution says system is for freelancers with multiple clients, stack includes JWT auth. This implies:
-- User editing requires auth (can't edit without login)
-- Reports consume task data (needs auth)
-
-Suggested order:
-
-**Phase 1: Foundations**
-1. auth-basic - JWT setup
-2. login - User login
-
-**Phase 2: Core**
-3. user-profile - Profile editing
-4. task-crud - Task CRUD
-5. reports - Monthly reports
-
-Order works? (yes/no)
-
-User: Yes.
-
-Agent: [Generates /anya/plan.md]
-✓ Plan created. Approve? (yes/no)
-```
-
-### Small Project
-```
-User: /anya-plan
-
-Agent: Reading constitution and stack...
-
-Project: Simple API for personal notes. Small project, 1 phase:
-
-**Phase 1: Core**
-1. setup - Express + PostgreSQL config
-2. notes-crud - CRUD operations
-3. search - Search by title/content
-
-Order logical? Missing anything? Extra?
-
-User: Perfect.
-
-Agent: [Generates /anya/plan.md]
-✓ Plan created. Approve? (yes/no)
-```
-
-## Next
-```
-/anya-spec next
-```

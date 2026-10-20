@@ -6,31 +6,32 @@ description: >
   coherence with spec/stack/constitution, runs automatic verification. Includes
   cascade diagnosis for problematic specs. Activates when tasks exist and user
   wants to implement.
-version: 0.4.0
+version: 0.5.0
 triggers:
   - user_intent: "implement spec"
   - user_intent: "execute tasks"
   - user_intent: "review implementation"
-  - context: "exists /anya/specs/<name>.tasks.md"
+  - context: "exists anya/specs/<name>.tasks.md"
 reads:
-  - /anya/constitution.md
-  - /anya/stack.md
-  - /anya/plan.md
-  - /anya/specs/<name>.md
-  - /anya/specs/<name>.tasks.md
+  - anya/constitution.md
+  - anya/stack.md
+  - anya/plan.md
+  - anya/specs/<name>.md
+  - anya/specs/<name>.tasks.md
 writes:
   - Project code (per tasks)
-  - /anya/plan.md (updates spec status)
-  - /anya/specs/<name>.tasks.md (marks tasks complete)
+  - anya/plan.md (updates spec status)
+  - anya/specs/<name>.tasks.md (marks tasks complete)
 next: anya-verify
 gates:
   - "All tasks marked complete"
+  - "Each task marked [x] immediately after completion — never batch-marked"
+  - "Partial progress shown after each task (X/Y)"
   - "Implementation meets all spec requirements"
   - "Coherent with stack (uses defined tech)"
   - "Coherent with constitution (respects rules + NOT list)"
-  - "Tests pass (if applicable)"
+  - "Tests pass (only commands declared in anya/stack.md)"
   - "Plan updated (spec marked complete)"
-  - "Progress shown"
 exit:
   - "All tasks implemented and marked"
   - "Automatic verification executed (anya-verify)"
@@ -42,6 +43,7 @@ anti:
   - "Ignoring errors without asking"
   - "Not validating against spec/stack/constitution"
   - "Marking tasks complete without implementing"
+  - "Marking all tasks complete at once"
   - "Continuing without passing gates"
 ---
 
@@ -51,7 +53,7 @@ anti:
 **Senior Code Craftsman** - Builds with quality. Executes tasks, validates coherence, runs verification.
 
 ## Purpose
-Execute spec tasks, implement code, verify consistency with spec/stack/constitution. Show progress and suggest future specs if risks/improvements detected.
+Execute spec tasks, implement code, verify consistency with spec/stack/constitution. Show progress and suggest future specs if risks/improvements detected. Output formats are guides — format freely, not templates to copy verbatim.
 
 ## Modes
 
@@ -73,22 +75,24 @@ Execute spec tasks, implement code, verify consistency with spec/stack/constitut
    Implementing <name> spec.
    - X tasks
    - Stack: <tech>
-   - Testing: <if applicable>
-   
+   - Testing: <commands declared in stack.md, or none>
+
    Start? (yes/no)
    ```
-4. **Execute** tasks in order:
-   - Implement code per task
-   - Mark task complete in `.tasks.md`
+4. **Execute** tasks in order, one at a time:
+   - Implement the task
+   - Mark it `[x]` immediately in `anya/specs/<name>.tasks.md` — never batch-mark at the end
+   - Show partial progress (`3/8`)
+   - Bump the tasks file version header
    - If ambiguous or fails → pause and ask
 5. **Validate** against:
    - Spec (meets requirements?)
    - Stack (correct tech?)
    - Constitution (respects rules?)
-   - Tests (pass if applicable?)
+   - Tests (run only the commands declared in `anya/stack.md`, if any)
 6. **Execute** `/anya-verify` automatically
-7. **Update** plan (mark spec complete)
-8. **Show** progress
+7. **Update** plan (mark spec complete, bump its version header)
+8. **Show** final progress
 9. **Ask** continue with next spec
 
 ## Review Process (Mode 3)
@@ -130,97 +134,4 @@ b) Skip task, continue
 c) Stop, resolve manually
 
 What to do? (a/b/c)
-```
-
-## Quality Gates
-
-- [ ] All tasks marked complete
-- [ ] Implementation meets spec requirements
-- [ ] Coherent with stack
-- [ ] Coherent with constitution
-- [ ] Tests pass (if applicable)
-- [ ] Plan updated
-- [ ] Progress shown
-
-## Examples
-
-### Implement
-```
-User: /anya-implement login
-
-Agent: [Reads tasks, spec, stack, constitution]
-
-Implementing login spec.
-- 8 tasks
-- Stack: TypeScript + Express + PostgreSQL
-- Testing: Vitest + Playwright
-
-Start? (yes/no)
-
-User: yes
-
-Agent: [Implements tasks, marks complete]
-
-✓ Implementation completed
-
-[Automatic verification - see anya-verify]
-
-✓ Spec completed: login.md
-
-Progress:
-━━━━━━━━━━━━━━━━━━━━━━
-Specs:
-  ✓ auth-basic.md
-  ✓ login.md ← just finished
-  ○ register.md (next)
-  ...
-
-Tasks: 12/120 completed
-━━━━━━━━━━━━━━━━━━━━━━
-
-Continue with next spec? (yes/no)
-```
-
-### Review
-```
-User: /anya-implement review login, not working as expected
-
-Agent: [Reads spec, tasks, analyzes implementation]
-
-Cascade diagnosis:
-
-Level 1: Tasks
-✓ All tasks marked complete
-
-Level 2: Spec
-✗ Spec says: "locks account after 5 attempts"
-✗ Implementation: No lockout logic
-
-Level 3: Stack
-✓ Uses TypeScript + Express + PostgreSQL (correct)
-
-Level 4: Constitution
-✓ Respects secure auth rules
-
-Conclusion:
-Problem at Level 2. Task 3.2 (lockout logic) marked complete but not implemented.
-
-Solution:
-1. Implement lockout in src/services/auth.ts
-2. Add lockedUntil field to User model
-3. Update endpoint to verify lockout
-
-Implement solution? (yes/no)
-```
-
-## Next
-
-If continue:
-```
-/anya-spec next
-```
-
-Or implement suggested specs:
-```
-/anya-spec <suggested prompt>
 ```
