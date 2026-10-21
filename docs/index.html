@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anya-SDD — Spec-Driven Development in seven markdown files</title>
+  <meta name="description" content="Anya-SDD turns “build me X” into a short, auditable pipeline: constitution → stack → plan → spec → tasks → code → verification. Seven markdown skills. Zero dependencies. Zero lock-in.">
+  <meta name="theme-color" content="#fbf6f2">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Anya-SDD — Spec-Driven Development in seven markdown files">
+  <meta property="og:description" content="An auditable pipeline for AI agents: constitution → stack → plan → spec → tasks → code → verification. Zero runtime, zero dependencies.">
+  <meta property="og:image" content="https://luisresendiz0.github.io/anya-sdd/assets/anya.png">
+  <meta property="og:url" content="https://luisresendiz0.github.io/anya-sdd/">
+
+  <link rel="icon" type="image/png" href="assets/anya.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <noscript>
+    <style>
+      .reveal, [data-reveal] { opacity: 1 !important; transform: none !important; }
+      .cursor { display: none; }
+      @media (max-width: 860px) {
+        .nav-toggle { display: none; }
+        .nav { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; border-bottom: 0; }
+      }
+    </style>
+  </noscript>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Anya-SDD home">
+        <img src="assets/anya.png" alt="" class="brand-mark" width="36" height="36">
+        <span class="brand-name">anya<span class="brand-accent">.sdd</span></span>
+      </a>
+
+      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav" id="nav-menu" aria-label="Main">
+        <a href="#how" class="nav-link">How it works</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#quickstart" class="nav-link">Quick start</a>
+        <a href="#philosophy" class="nav-link">Philosophy</a>
+        <a class="btn btn-ghost btn-sm nav-cta" href="https://github.com/luisresendiz0/anya-sdd" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.55v-2.15c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .3.21.66.8.55A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+          GitHub
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="dot"></span> Spec-Driven Development · v0.5.0</p>
+          <h1>Ship what you <span class="highlight">actually</span> asked for.</h1>
+          <p class="lead">
+            AI agents drift. Anya-SDD turns “build me X” into a short, auditable pipeline:
+            <strong>constitution → stack → plan → spec → tasks → code → verification</strong>.
+            Seven markdown files. No runtime. No dependencies. No lock-in.
+          </p>
+          <div class="hero-actions">
+            <a href="#quickstart" class="btn btn-primary">
+              Get started in 2 minutes
+              <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11M10 5l5 5-5 5"/></svg>
+            </a>
+            <a href="https://github.com/luisresendiz0/anya-sdd" class="btn btn-ghost" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.55v-2.15c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .3.21.66.8.55A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+              View source
+            </a>
+          </div>
+          <ul class="hero-meta" aria-label="Project facts">
+            <li><strong>7</strong> skills</li>
+            <li><strong>0</strong> dependencies</li>
+            <li><strong>MIT</strong> licensed</li>
+          </ul>
+        </div>
+
+        <div class="hero-visual">
+          <div class="mascot-card">
+            <div class="mascot-ring" aria-hidden="true"></div>
+            <img src="assets/anya.png" alt="Anya, the project mascot" class="mascot-img" width="360" height="360">
+            <div class="float-chip chip-1">constitution.md</div>
+            <div class="float-chip chip-2">✓ verified</div>
+            <div class="float-chip chip-3">0 deps</div>
+          </div>
+
+          <div class="terminal hero-terminal" aria-label="Example agent session">
+            <div class="terminal-bar">
+              <span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="terminal-title">your-agent</span>
+            </div>
+            <pre class="terminal-body"><code><span class="t-prompt">$</span> <span class="t-cmd" data-typing="/anya-implement login">/anya-implement login</span><span class="cursor" data-cursor aria-hidden="true"></span>
+<span class="t-out" data-reveal>◆ Spec: login.md · Full-Spec · 9 sections</span>
+<span class="t-out" data-reveal><span class="t-ok">✓</span> Tasks 8/8 · marked one at a time</span>
+<span class="t-out" data-reveal><span class="t-ok">✓</span> Verification 5/5 levels passed</span>
+<span class="t-out t-muted" data-reveal>→ next: /anya-spec register</span></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <ul class="stats" id="stats">
+          <li><span class="stat-value" data-count="7">0</span><span class="stat-label">markdown skills</span></li>
+          <li><span class="stat-value" data-count="0">0</span><span class="stat-label">runtime dependencies</span></li>
+          <li><span class="stat-value" data-count="5">0</span><span class="stat-label">verification levels</span></li>
+          <li><span class="stat-value" data-count="35" data-suffix="%">0</span><span class="stat-label">fewer lines in v0.5</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- WHY -->
+    <section class="section" id="why">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Why Anya</p>
+          <h2>Agents are fast. They also drift.</h2>
+          <p class="section-lead">
+            Without a written source of truth, agents invent requirements, forget constraints,
+            and ship code that “works” but doesn’t match the brief. Anya fixes that with three habits.
+          </p>
+        </div>
+
+        <div class="grid grid-3">
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">✍️</div>
+            <h3>Write the intent once</h3>
+            <p>Vision, stack, and plan live in files — not in a chat that disappears tomorrow.</p>
+            <span class="card-tag">constitution · stack · plan</span>
+          </article>
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">🛡️</div>
+            <h3>Validate every step</h3>
+            <p>Specs can’t contradict the constitution. Tasks can’t invent files. Verification can’t assume tests that don’t exist.</p>
+            <span class="card-tag">5 validation levels</span>
+          </article>
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">🔁</div>
+            <h3>Close the loop</h3>
+            <p>Every implementation ends with a verification pass and concrete suggestions for the next spec.</p>
+            <span class="card-tag">verify → next spec</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PIPELINE -->
+    <section class="section section-alt" id="how">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">How it works</p>
+          <h2>One pipeline, seven skills</h2>
+          <p class="section-lead">
+            The first three steps run <strong>once per project</strong>. The rest repeat for every feature —
+            and verification feeds the next spec.
+          </p>
+        </div>
+
+        <div class="pipeline" id="pipeline">
+          <div class="pipeline-track" role="tablist" aria-label="Anya-SDD pipeline steps">
+            <button class="pipe-step" role="tab" aria-selected="true" aria-controls="pipe-panel" data-step="0" id="pipe-tab-0">
+              <span class="pipe-num">01</span>
+              <span class="pipe-name">constitution</span>
+              <span class="pipe-tag">once</span>
+            </button>
+            <button class="pipe-step" role="tab" aria-selected="false" aria-controls="pipe-panel" data-step="1" id="pipe-tab-1" tabindex="-1">
+              <span class="pipe-num">02</span>
+              <span class="pipe-name">stack</span>
+              <span class="pipe-tag">once</span>
+            </button>
+            <button class="pipe-step" role="tab" aria-selected="false" aria-controls="pipe-panel" data-step="2" id="pipe-tab-2" tabindex="-1">
+              <span class="pipe-num">03</span>
+              <span class="pipe-name">plan</span>
+              <span class="pipe-tag">once</span>
+            </button>
+            <button class="pipe-step" role="tab" aria-selected="false" aria-controls="pipe-panel" data-step="3" id="pipe-tab-3" tabindex="-1">
+              <span class="pipe-num">04</span>
+              <span class="pipe-name">spec</span>
+              <span class="pipe-tag">per feature</span>
+            </button>
+            <button class="pipe-step" role="tab" aria-selected="false" aria-controls="pipe-panel" data-step="4" id="pipe-tab-4" tabindex="-1">
+              <span class="pipe-num">05</span>
+              <span class="pipe-name">task</span>
+              <span class="pipe-tag">per feature</span>
+            </button>
+            <button class="pipe-step" role="tab" aria-selected="false" aria-controls="pipe-panel" data-step="5" id="pipe-tab-5" tabindex="-1">
+              <span class="pipe-num">06</span>
+              <span class="pipe-name">implement</span>
+              <span class="pipe-tag">per feature</span>
+            </button>
+            <button class="pipe-step" role="tab" aria-selected="false" aria-controls="pipe-panel" data-step="6" id="pipe-tab-6" tabindex="-1">
+              <span class="pipe-num">07</span>
+              <span class="pipe-name">verify</span>
+              <span class="pipe-tag">per feature</span>
+            </button>
+          </div>
+
+          <div class="pipe-panel" id="pipe-panel" role="tabpanel" aria-labelledby="pipe-tab-0">
+            <div class="pipe-panel-head">
+              <span class="pipe-role" id="pipe-role">Visionary Product Architect</span>
+              <span class="pipe-loop" id="pipe-loop">runs once per project</span>
+            </div>
+            <h3 id="pipe-title">/anya-constitution</h3>
+            <p id="pipe-desc">Extract the vision, scope, rules, and exclusions from a single prompt. Ask only what’s missing, flag contradictions, and request approval before writing.</p>
+            <div class="pipe-foot">
+              <span class="pipe-output-label">Output</span>
+              <code class="pipe-output" id="pipe-output">anya/constitution.md</code>
+            </div>
+          </div>
+        </div>
+
+        <p class="loop-note">
+          <span aria-hidden="true">↻</span> <strong>verify</strong> loops back into the next <strong>spec</strong> — the plan never silently grows.
+        </p>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" id="skills">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">The roster</p>
+          <h2>Seven skills, seven roles</h2>
+          <p class="section-lead">
+            Each skill is a persona with a job, a strict output, and quality gates. No ceremony, no duplicates.
+          </p>
+        </div>
+
+        <div class="grid grid-4">
+          <article class="skill reveal">
+            <div class="skill-top"><span class="skill-icon" aria-hidden="true">🧭</span><span class="skill-idx">01</span></div>
+            <h3>constitution</h3>
+            <p class="skill-role">Visionary Product Architect</p>
+            <p>Vision, scope, rules, exclusions.</p>
+          </article>
+          <article class="skill reveal">
+            <div class="skill-top"><span class="skill-icon" aria-hidden="true">🧱</span><span class="skill-idx">02</span></div>
+            <h3>stack</h3>
+            <p class="skill-role">Pragmatic Systems Architect</p>
+            <p>Tech stack + testing strategy with exact commands.</p>
+          </article>
+          <article class="skill reveal">
+            <div class="skill-top"><span class="skill-icon" aria-hidden="true">🗺️</span><span class="skill-idx">03</span></div>
+            <h3>plan</h3>
+            <p class="skill-role">Strategic Delivery Lead</p>
+            <p>Specs organized in dependency-aware phases.</p>
+          </article>
+          <article class="skill reveal">
+            <div class="skill-top"><span class="skill-icon" aria-hidden="true">📄</span><span class="skill-idx">04</span></div>
+            <h3>spec</h3>
+            <p class="skill-role">Product-Minded Tech Lead</p>
+            <p>Mini or Full spec, chosen by complexity.</p>
+          </article>
+          <article class="skill reveal">
+            <div class="skill-top"><span class="skill-icon" aria-hidden="true">✅</span><span class="skill-idx">05</span></div>
+            <h3>task</h3>
+            <p class="skill-role">Agile Implementation Strategist</p>
+            <p>Spec → ordered tasks with files and dependencies.</p>
+          </article>
+          <article class="skill reveal">
+            <div class="skill-top"><span class="skill-icon" aria-hidden="true">🛠️</span><span class="skill-idx">06</span></div>
+            <h3>implement</h3>
+            <p class="skill-role">Senior Code Craftsman</p>
+            <p>Builds task by task, marking progress as it goes.</p>
+          </article>
+          <article class="skill reveal">
+            <div class="skill-top"><span class="skill-icon" aria-hidden="true">🔍</span><span class="skill-idx">07</span></div>
+            <h3>verify</h3>
+            <p class="skill-role">Quality Assurance Architect</p>
+            <p>Validates all levels and suggests what’s next.</p>
+          </article>
+          <article class="skill skill-cta reveal">
+            <h3>Portable by design</h3>
+            <p>Any agent that reads files can run it — OpenCode, Claude Code, or <code>.agents/skills</code>.</p>
+            <a href="#quickstart" class="text-link">Install the skills →</a>
+          </article>
+        </div>
+
+        <div class="spec-sizes">
+          <article class="spec-card">
+            <div class="spec-head">
+              <span class="spec-badge">Mini-Spec</span>
+              <span class="spec-count">3 sections</span>
+            </div>
+            <p>For fixes, small features, one component. Fast to write, fast to review.</p>
+            <ul class="check-list">
+              <li>Goal &amp; scope</li>
+              <li>Acceptance criteria</li>
+              <li>Out of scope</li>
+            </ul>
+          </article>
+          <article class="spec-card spec-card--featured">
+            <div class="spec-head">
+              <span class="spec-badge spec-badge--strong">Full-Spec</span>
+              <span class="spec-count">9 sections</span>
+            </div>
+            <p>For architecture changes, integrations, and multi-component work.</p>
+            <ul class="check-list">
+              <li>Context &amp; constraints</li>
+              <li>Flows, data &amp; edge cases</li>
+              <li>Acceptance criteria per requirement</li>
+              <li>Risks, rollout &amp; exclusions</li>
+            </ul>
+          </article>
+        </div>
+        <p class="center-note">The skill picks the size from complexity and impact — and tells you which one it chose.</p>
+      </div>
+    </section>
+
+    <!-- QUICKSTART -->
+    <section class="section section-dark" id="quickstart">
+      <div class="container">
+        <div class="section-head section-head--onDark">
+          <p class="eyebrow">Quick start</p>
+          <h2>Try it in two minutes</h2>
+          <p class="section-lead">No installer, no package manager, no config file. Copy one folder and talk to your agent.</p>
+        </div>
+
+        <div class="start-grid">
+          <div class="start-main">
+            <div class="step-block">
+              <div class="step-head">
+                <span class="step-num">1</span>
+                <div>
+                  <h3>Get the skills</h3>
+                  <p>Clone once, drop <code>.anya/</code> into your project.</p>
+                </div>
+              </div>
+              <div class="code">
+                <div class="code-bar">
+                  <span class="code-label">bash</span>
+                  <button class="copy-btn" data-copy="#code-clone" type="button">Copy</button>
+                </div>
+                <pre><code id="code-clone"><span class="c-cmd">git clone</span> https://github.com/luisresendiz0/anya-sdd.git /tmp/anya-sdd
+<span class="c-cmd">cp -r</span> /tmp/anya-sdd/.anya /your-project/
+<span class="c-cmd">cd</span> /your-project</code></pre>
+              </div>
+            </div>
+
+            <div class="step-block">
+              <div class="step-head">
+                <span class="step-num">2</span>
+                <div>
+                  <h3>Make your agent aware</h3>
+                  <p>Global skills (recommended) or project mode — pick your harness.</p>
+                </div>
+              </div>
+              <div class="harness">
+                <div class="tabs" role="tablist" aria-label="Install targets">
+                  <button class="tab" role="tab" id="tab-opencode" aria-selected="true" aria-controls="panel-opencode" data-tab="opencode">OpenCode</button>
+                  <button class="tab" role="tab" id="tab-claude" aria-selected="false" aria-controls="panel-claude" data-tab="claude" tabindex="-1">Claude Code</button>
+                  <button class="tab" role="tab" id="tab-project" aria-selected="false" aria-controls="panel-project" data-tab="project" tabindex="-1">Project mode</button>
+                </div>
+
+                <div class="code tab-panel" role="tabpanel" id="panel-opencode" aria-labelledby="tab-opencode">
+                  <div class="code-bar">
+                    <span class="code-label">bash</span>
+                    <button class="copy-btn" data-copy="#code-opencode" type="button">Copy</button>
+                  </div>
+                  <pre><code id="code-opencode"><span class="c-muted"># auto-discovery via Agent Skills layout</span>
+<span class="c-cmd">mkdir -p</span> ~/.config/opencode/skills
+<span class="c-cmd">cp -r</span> .anya/anya-* ~/.config/opencode/skills/</code></pre>
+                </div>
+
+                <div class="code tab-panel" role="tabpanel" id="panel-claude" aria-labelledby="tab-claude" hidden>
+                  <div class="code-bar">
+                    <span class="code-label">bash</span>
+                    <button class="copy-btn" data-copy="#code-claude" type="button">Copy</button>
+                  </div>
+                  <pre><code id="code-claude"><span class="c-muted"># or: .opencode/skills/ · .agents/skills/</span>
+<span class="c-cmd">mkdir -p</span> ~/.claude/skills
+<span class="c-cmd">cp -r</span> .anya/anya-* ~/.claude/skills/</code></pre>
+                </div>
+
+                <div class="code tab-panel" role="tabpanel" id="panel-project" aria-labelledby="tab-project" hidden>
+                  <div class="code-bar">
+                    <span class="code-label">AGENTS.md</span>
+                    <button class="copy-btn" data-copy="#code-project" type="button">Copy</button>
+                  </div>
+                  <pre><code id="code-project"><span class="c-muted"># no global install — point your agent at the folder</span>
+This project uses Anya-SDD. Before writing code, read
+<span class="c-str">`.anya/anya-&lt;skill&gt;/SKILL.md`</span> and follow it.
+Artifacts live in <span class="c-str">`anya/`</span>.</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="step-block">
+              <div class="step-head">
+                <span class="step-num">3</span>
+                <div>
+                  <h3>Run the foundation</h3>
+                  <p>Three commands, once per project.</p>
+                </div>
+              </div>
+              <div class="code">
+                <div class="code-bar">
+                  <span class="code-label">agent</span>
+                  <button class="copy-btn" data-copy="#code-foundation" type="button">Copy</button>
+                </div>
+                <pre><code id="code-foundation"><span class="c-ok">/anya-constitution</span> Task manager for freelancers with multiple clients.
+Need projects by client, time tracking, monthly reports, PDF invoicing.
+No real-time collaboration or payments.
+
+<span class="c-ok">/anya-stack</span> TypeScript + Express + PostgreSQL. React + Tailwind.
+
+<span class="c-ok">/anya-plan</span></code></pre>
+              </div>
+            </div>
+
+            <div class="step-block">
+              <div class="step-head">
+                <span class="step-num">4</span>
+                <div>
+                  <h3>Build one feature</h3>
+                  <p><code>/anya-implement</code> runs <code>/anya-verify</code> automatically and suggests what’s next.</p>
+                </div>
+              </div>
+              <div class="code">
+                <div class="code-bar">
+                  <span class="code-label">agent</span>
+                  <button class="copy-btn" data-copy="#code-feature" type="button">Copy</button>
+                </div>
+                <pre><code id="code-feature"><span class="c-ok">/anya-spec</span> next
+<span class="c-ok">/anya-task</span> login
+<span class="c-ok">/anya-implement</span> login</code></pre>
+              </div>
+            </div>
+
+            <p class="harness-note">
+              <code>/anya-…</code> is the name of each skill. If your agent doesn’t support slash commands,
+              ask it to load the matching skill by name — the result is the same.
+            </p>
+          </div>
+
+          <aside class="start-aside">
+            <div class="aside-card">
+              <h3>What lands in your project</h3>
+              <pre class="tree"><code><span class="tr-dir">your-project/</span>
+├── <span class="tr-dir">.anya/</span>                      <span class="tr-comment"># the 7 skills (copy once)</span>
+│   ├── anya-constitution/SKILL.md
+│   ├── anya-stack/SKILL.md
+│   ├── anya-plan/SKILL.md
+│   ├── anya-spec/SKILL.md
+│   ├── anya-task/SKILL.md
+│   ├── anya-implement/SKILL.md
+│   └── anya-verify/SKILL.md
+└── <span class="tr-dir">anya/</span>                       <span class="tr-comment"># source of truth</span>
+    ├── constitution.md
+    ├── stack.md
+    ├── plan.md
+    └── <span class="tr-dir">specs/</span>
+        ├── login.md
+        └── login.tasks.md</code></pre>
+            </div>
+            <div class="aside-note">
+              <span class="aside-note-icon" aria-hidden="true">◆</span>
+              <p>Every artifact starts with <code>&gt; version: N · updated: YYYY-MM-DD</code> — you always know how old it is.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- VERIFICATION -->
+    <section class="section" id="verification">
+      <div class="container verify-grid">
+        <div class="verify-copy">
+          <p class="eyebrow">Verification</p>
+          <h2>Five levels. No invented tests.</h2>
+          <p class="section-lead">
+            Verification runs in cascade, and reports every level as it checks it. If
+            <code>stack.md</code> declares no testing, Level 5 is honestly reported as
+            <span class="mono-badge">N/A</span> instead of making something up.
+          </p>
+          <ol class="levels">
+            <li><span class="level-num">L1</span><div><strong>Tasks</strong><span>All tasks completed and marked incrementally.</span></div></li>
+            <li><span class="level-num">L2</span><div><strong>Spec</strong><span>Every requirement met.</span></div></li>
+            <li><span class="level-num">L3</span><div><strong>Stack</strong><span>Implementation consistent with the declared stack.</span></div></li>
+            <li><span class="level-num">L4</span><div><strong>Constitution</strong><span>No rule or exclusion violated.</span></div></li>
+            <li><span class="level-num">L5</span><div><strong>Tests</strong><span>Exact commands from <code>stack.md</code> — or N/A.</span></div></li>
+          </ol>
+        </div>
+
+        <div class="terminal verify-terminal" aria-label="Example verification report">
+          <div class="terminal-bar">
+            <span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="terminal-title">/anya-verify login</span>
+          </div>
+          <pre class="terminal-body"><code><span class="r-title">Spec completed: login.md</span>
+
+<span class="r-head">Verification</span>
+  Level 1  Tasks          <span class="r-ok">8/8</span>
+  Level 2  Spec           <span class="r-ok">5/5 requirements met</span>
+  Level 3  Stack          <span class="r-ok">consistent</span>
+  Level 4  Constitution   <span class="r-ok">consistent</span>
+  Level 5  Tests          <span class="r-ok">6/6 pass</span>
+
+<span class="r-warn">Risks: 1</span>    <span class="r-info">Improvements: 2</span>
+
+<span class="r-head">Suggested specs</span>
+1. Rate limiting    → /anya-spec global rate limiting...
+2. Login logging    → /anya-spec logging all login attempts...
+
+<span class="r-head">Progress</span>
+  auth-basic.md   <span class="r-muted">done</span>
+  login.md        <span class="r-ok">just finished</span>
+  register.md     <span class="r-info">next</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHANGE MANAGEMENT -->
+    <section class="section section-alt" id="changes">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Change management</p>
+          <h2>Changing your mind is a feature</h2>
+          <p class="section-lead">Decisions are editable, and the blast radius is explicit.</p>
+        </div>
+
+        <div class="table-wrap reveal">
+          <table class="change-table">
+            <caption class="sr-only">What to do when a decision changes</caption>
+            <thead>
+              <tr><th scope="col">What changed</th><th scope="col">What to do</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><span class="table-kicker">Constitution</span></th>
+                <td>Edit it, re-run <code>/anya-plan</code>, regenerate affected specs.</td>
+              </tr>
+              <tr>
+                <th scope="row"><span class="table-kicker">Stack</span></th>
+                <td>Edit it, regenerate affected specs.</td>
+              </tr>
+              <tr>
+                <th scope="row"><span class="table-kicker">Plan</span></th>
+                <td>Add or remove specs incrementally.</td>
+              </tr>
+              <tr>
+                <th scope="row"><span class="table-kicker">Spec</span></th>
+                <td><code>/anya-spec update &lt;name&gt;</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHILOSOPHY -->
+    <section class="section" id="philosophy">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Philosophy</p>
+          <h2>Minimal by construction</h2>
+          <p class="section-lead">Seven skills, no ceremony, and a folder you can delete without breaking anything.</p>
+        </div>
+
+        <ul class="philosophy-grid">
+          <li class="philo reveal"><span class="philo-num">01</span><h3>Zero dependencies</h3><p>Only markdown. Nothing to install, nothing to patch.</p></li>
+          <li class="philo reveal"><span class="philo-num">02</span><h3>Portable</h3><p>Any agent that reads files can run it.</p></li>
+          <li class="philo reveal"><span class="philo-num">03</span><h3>Pragmatic</h3><p>Decisions, not blind automation.</p></li>
+          <li class="philo reveal"><span class="philo-num">04</span><h3>Minimal</h3><p>Seven skills. No ceremony.</p></li>
+          <li class="philo reveal"><span class="philo-num">05</span><h3>Token-efficient</h3><p>Imperative English, no filler.</p></li>
+        </ul>
+
+        <div class="not-box reveal">
+          <h3>What Anya is <em>not</em></h3>
+          <ul>
+            <li><span aria-hidden="true">✕</span><div><strong>Not a CLI or code generator.</strong> Your agent writes the code.</div></li>
+            <li><span aria-hidden="true">✕</span><div><strong>Not a project tracker.</strong> The plan is a plain markdown table.</div></li>
+            <li><span aria-hidden="true">✕</span><div><strong>Not a framework you migrate to.</strong> Delete the folder and nothing breaks.</div></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHANGELOG -->
+    <section class="section section-alt" id="changelog">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Changelog</p>
+          <h2>Shipped, measured, trimmed</h2>
+          <p class="section-lead">v0.5 removed 35% of the skills’ lines without losing a single gate.</p>
+        </div>
+
+        <ol class="timeline">
+          <li class="timeline-item reveal">
+            <span class="timeline-version">v0.5.0</span>
+            <div class="timeline-body">
+              <div class="timeline-head">
+                <h3>Structure &amp; portability</h3>
+                <time datetime="2026-10-20">Oct 20, 2026</time>
+              </div>
+              <p><code>.anya/anya-&lt;skill&gt;/SKILL.md</code> layout, relative paths everywhere, ecosystem-agnostic testing with exact commands.</p>
+              <div class="metrics">
+                <span><strong>−35%</strong> lines</span>
+                <span><strong>0</strong> absolute paths</span>
+                <span><strong>0</strong> hardcoded test tools</span>
+              </div>
+            </div>
+          </li>
+          <li class="timeline-item reveal">
+            <span class="timeline-version">v0.4.0</span>
+            <div class="timeline-body">
+              <div class="timeline-head">
+                <h3>Token optimization</h3>
+                <time datetime="2026-01-19">Jan 19, 2026</time>
+              </div>
+              <p>Skills rewritten in imperative English with condensed frontmatter — 40% fewer lines per skill.</p>
+            </div>
+          </li>
+          <li class="timeline-item reveal">
+            <span class="timeline-version">v0.3.0</span>
+            <div class="timeline-body">
+              <div class="timeline-head">
+                <h3>Role-based architecture</h3>
+                <time datetime="2026-01-19">Jan 19, 2026</time>
+              </div>
+              <p>Seven specialized personas, triggers, quality gates, anti-patterns, and pipeline chaining.</p>
+            </div>
+          </li>
+          <li class="timeline-item reveal">
+            <span class="timeline-version">v0.2.0</span>
+            <div class="timeline-body">
+              <div class="timeline-head">
+                <h3>Full implementation</h3>
+                <time datetime="2026-01-18">Jan 18, 2026</time>
+              </div>
+              <p>Seven core skills, Mini vs Full specs, cascade diagnosis, automatic verification.</p>
+            </div>
+          </li>
+          <li class="timeline-item reveal">
+            <span class="timeline-version">v0.1.0</span>
+            <div class="timeline-body">
+              <div class="timeline-head">
+                <h3>Initial concept</h3>
+                <time datetime="2026-01-17">Jan 17, 2026</time>
+              </div>
+              <p>Framework concept, workflow, and skill structure proposal.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-card reveal">
+          <div class="cta-glow" aria-hidden="true"></div>
+          <img src="assets/anya.png" alt="" class="cta-mascot" width="132" height="132" loading="lazy">
+          <div class="cta-copy">
+            <p class="eyebrow eyebrow--dark">Ready when you are</p>
+            <h2>Seven files between “vibes” and shipped.</h2>
+            <p>Clone the repo, copy <code>.anya/</code>, and let your agent read the source of truth.</p>
+            <div class="cta-actions">
+              <a href="https://github.com/luisresendiz0/anya-sdd" class="btn btn-dark" target="_blank" rel="noopener">Clone anya-sdd</a>
+              <a href="https://github.com/luisresendiz0/anya-sdd/blob/main/QUICKSTART.md" class="btn btn-outline-dark" target="_blank" rel="noopener">Read the quickstart</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="assets/anya.png" alt="" class="brand-mark" width="32" height="32" loading="lazy">
+        <div>
+          <p class="footer-name">anya<span class="brand-accent">.sdd</span></p>
+          <p class="footer-tagline">Spec-Driven Development, minimal and auditable.</p>
+        </div>
+      </div>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="https://github.com/luisresendiz0/anya-sdd" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/luisresendiz0/anya-sdd/blob/main/QUICKSTART.md" target="_blank" rel="noopener">Quickstart</a>
+        <a href="https://github.com/luisresendiz0/anya-sdd/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog</a>
+        <a href="https://github.com/luisresendiz0/anya-sdd/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
+      </nav>
+    </div>
+    <div class="container footer-bottom">
+      <p>© <span id="year">2026</span> Anya-SDD · MIT License</p>
+      <p>Inspired by Spy × Family. Optimized for AI agents.</p>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

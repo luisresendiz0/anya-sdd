@@ -11,7 +11,7 @@ so the agent can't quietly drift from what you actually asked for.
 No runtime. No dependencies. No lock-in. Just `.md` files your agent can read and
 your team can review.
 
-[Quick start](#try-it-in-2-minutes) · [How it works](#how-it-works) · [Skills](#skills) · [Philosophy](#philosophy)
+[Live site](https://luisresendiz0.github.io/anya-sdd/) · [Quick start](#try-it-in-2-minutes) · [How it works](#how-it-works) · [Skills](#skills) · [Philosophy](#philosophy)
 
 ---
 
@@ -181,6 +181,17 @@ verification marks that level as N/A instead of inventing tests.
 
 - [QUICKSTART.md](./QUICKSTART.md) — the full workflow, scenario by scenario
 - [CHANGELOG.md](./CHANGELOG.md) — version history
+- [`docs/`](./docs/) — landing page source, published to GitHub Pages
+
+## Landing page
+
+The landing page in [`docs/`](./docs/) is deployed by
+[`.github/workflows/pages.yml`](./.github/workflows/pages.yml) on every push to
+`main` that touches `docs/`.
+
+One-time setup: open **Settings → Pages** and set **Source** to **GitHub Actions**.
+Once the workflow finishes, the site is served at
+`https://luisresendiz0.github.io/anya-sdd/`.
 
 ## License
 
