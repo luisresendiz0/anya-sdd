@@ -5,13 +5,13 @@ description: >
   Decomposes specs into detailed, sequential, actionable tasks. Adapts structure
   based on spec type (Mini-Spec or Full-Spec). Activates when spec exists and user
   wants to decompose into tasks.
-version: 0.5.0
+version: 0.6.0
 triggers:
   - user_intent: "decompose spec"
   - user_intent: "generate tasks"
-  - context: "exists anya/specs/<name>.md"
-reads: [anya/constitution.md, anya/stack.md, anya/specs/<name>.md]
-writes: [anya/specs/<name>.tasks.md]
+  - context: "exists anya/specs/NNN-name/spec.md"
+reads: [anya/constitution.md, anya/stack.md, anya/specs/NNN-name/spec.md]
+writes: [anya/specs/NNN-name/tasks.md]
 next: anya-implement
 gates:
   - "All tasks together cover entire spec"
@@ -23,27 +23,26 @@ gates:
   - "Completion criteria clear"
   - "Coherent with constitution (no NOT violations)"
   - "Coherent with stack (uses defined tech)"
-  - "Version header present in anya/specs/<name>.tasks.md"
+  - "Version header present in anya/specs/NNN-name/tasks.md"
 exit:
-  - "File created at anya/specs/<name>.tasks.md"
+  - "File created at anya/specs/NNN-name/tasks.md"
   - "All tasks defined with dependencies and files"
-  - "User approves tasks"
+  - "Tasks reviewed; execution authorized"
 anti:
   - "Tasks too large (>1 session)"
   - "Tasks too small (trivial)"
   - "Implicit dependencies (undeclared)"
   - "Not specifying files"
-  - "Illogical order (tests before code)"
+  - "Order contradicts dependencies"
   - "Violating constitution NOT list"
 ---
 
 # Anya Task
 
-## Role
-**Agile Implementation Strategist** - Breaks specs into executable steps. Ensures clarity and sequence.
-
 ## Purpose
-Decompose spec into detailed, sequential, actionable tasks. Each task completable in one focused session.
+Each task fits one focused session.
+
+Resolve the spec by unique name or numbered folder; ask if ambiguous.
 
 ## Modes
 
@@ -114,35 +113,24 @@ Only use if >10 tasks or needs organization:
 4. Tests
 
 ❌ Bad:
-1. Tests (no code yet)
-2. Endpoints (no logic)
-3. Data model (should be first)
+1. Endpoints using missing logic
+2. Logic using an undefined model
+3. Data model
 
-### Dependencies
+Tests may precede code when following TDD.
 
-Every task must list dependencies:
-```markdown
-- [ ] **Task 3:** Create login endpoint
-  - Dependencies: Tasks 1, 2
-```
-
-### Files
-
-Every task must specify file(s):
-```markdown
-- [ ] **Task 1:** Create User model
-  - File: `src/models/user.ts`
-```
+Every task lists dependencies and file(s), as shown above.
+Always write `tasks.md` beside `spec.md`, including Mini-Specs. Keep their folder.
 
 ## Adaptation to Spec Type
 
 ### Mini-Spec → Simple Tasks
-- 3-6 tasks
+- Only the tasks needed; no minimum count
 - No groups
 - Focus on essentials
 
 ### Full-Spec → Detailed Tasks
-- 8-15 tasks
+- Decompose by dependencies, not a fixed task count
 - Groups optional if >10 tasks
 - Include test tasks if testing enabled
 
@@ -154,5 +142,5 @@ Every task must specify file(s):
 4. **Consider** user prompt (if provided)
 5. **Analyze** spec requirements
 6. **Decompose** into tasks following principles
-7. **Generate** `anya/specs/<name>.tasks.md`
-8. **Confirm** with user
+7. **Generate** `anya/specs/NNN-name/tasks.md`
+8. **Confirm** unresolved decisions; proceed when scope and execution are authorized

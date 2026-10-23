@@ -62,7 +62,7 @@
       <div class="hero-glow" aria-hidden="true"></div>
       <div class="container hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow"><span class="dot"></span> Spec-Driven Development · v0.5.0</p>
+          <p class="eyebrow"><span class="dot"></span> Spec-Driven Development · v0.6.0</p>
           <h1>Ship what you <span class="highlight">actually</span> asked for.</h1>
           <p class="lead">
             AI agents drift. Anya-SDD turns “build me X” into a short, auditable pipeline:
@@ -101,7 +101,7 @@
               <span class="terminal-title">your-agent</span>
             </div>
             <pre class="terminal-body"><code><span class="t-prompt">$</span> <span class="t-cmd" data-typing="/anya-implement login">/anya-implement login</span><span class="cursor" data-cursor aria-hidden="true"></span>
-<span class="t-out" data-reveal>◆ Spec: login.md · Full-Spec · 9 sections</span>
+<span class="t-out" data-reveal>◆ Spec: 002-login/spec.md · Full-Spec · 9 sections</span>
 <span class="t-out" data-reveal><span class="t-ok">✓</span> Tasks 8/8 · marked one at a time</span>
 <span class="t-out" data-reveal><span class="t-ok">✓</span> Verification 5/5 levels passed</span>
 <span class="t-out t-muted" data-reveal>→ next: /anya-spec register</span></code></pre>
@@ -460,8 +460,15 @@ No real-time collaboration or payments.
     ├── stack.md
     ├── plan.md
     └── <span class="tr-dir">specs/</span>
-        ├── login.md
-        └── login.tasks.md</code></pre>
+        ├── <span class="tr-dir">001-auth/</span>
+        │   ├── spec.md
+        │   └── tasks.md
+        ├── <span class="tr-dir">002-login/</span>
+        │   ├── spec.md
+        │   └── tasks.md
+        └── <span class="tr-dir">003-dashboard/</span>
+            ├── spec.md
+            └── tasks.md</code></pre>
             </div>
             <div class="aside-note">
               <span class="aside-note-icon" aria-hidden="true">◆</span>
@@ -497,7 +504,7 @@ No real-time collaboration or payments.
             <span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span>
             <span class="terminal-title">/anya-verify login</span>
           </div>
-          <pre class="terminal-body"><code><span class="r-title">Spec completed: login.md</span>
+          <pre class="terminal-body"><code><span class="r-title">Spec completed: 002-login/spec.md</span>
 
 <span class="r-head">Verification</span>
   Level 1  Tasks          <span class="r-ok">8/8</span>
@@ -513,9 +520,9 @@ No real-time collaboration or payments.
 2. Login logging    → /anya-spec logging all login attempts...
 
 <span class="r-head">Progress</span>
-  auth-basic.md   <span class="r-muted">done</span>
-  login.md        <span class="r-ok">just finished</span>
-  register.md     <span class="r-info">next</span></code></pre>
+  001-auth/      <span class="r-muted">done</span>
+  002-login/     <span class="r-ok">just finished</span>
+  003-register/  <span class="r-info">next</span></code></pre>
         </div>
       </div>
     </section>
@@ -592,10 +599,20 @@ No real-time collaboration or payments.
         <div class="section-head">
           <p class="eyebrow">Changelog</p>
           <h2>Shipped, measured, trimmed</h2>
-          <p class="section-lead">v0.5 removed 35% of the skills’ lines without losing a single gate.</p>
+          <p class="section-lead">Numbered spec folders, small usable increments, and mandatory task files.</p>
         </div>
 
         <ol class="timeline">
+          <li class="timeline-item reveal">
+            <span class="timeline-version">v0.6.0</span>
+            <div class="timeline-body">
+              <div class="timeline-head">
+                <h3>Numbered specs &amp; incremental delivery</h3>
+                <time datetime="2026-10-22">Oct 22, 2026</time>
+              </div>
+              <p>Each spec lives in a numbered folder with <code>spec.md</code> and mandatory <code>tasks.md</code>. Detail the next usable increment just before building it, then adapt from feedback.</p>
+            </div>
+          </li>
           <li class="timeline-item reveal">
             <span class="timeline-version">v0.5.0</span>
             <div class="timeline-body">

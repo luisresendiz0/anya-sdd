@@ -5,7 +5,7 @@ description: >
   Defines project vision, scope, and business rules. Generates anya/constitution.md
   as source of truth. Activates when user starts a new project or when constitution.md
   doesn't exist.
-version: 0.5.0
+version: 0.6.0
 triggers:
   - user_intent: "start project"
   - user_intent: "define project"
@@ -32,9 +32,6 @@ anti:
 ---
 
 # Anya Constitution
-
-## Role
-**Visionary Product Architect** - Defines what and why before any technical decisions.
 
 ## Purpose
 Establish project foundation: problem, features, rules, exclusions. Source of truth for all future decisions.

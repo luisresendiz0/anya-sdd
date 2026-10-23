@@ -6,22 +6,22 @@ description: >
   coherence with spec/stack/constitution, runs automatic verification. Includes
   cascade diagnosis for problematic specs. Activates when tasks exist and user
   wants to implement.
-version: 0.5.0
+version: 0.6.0
 triggers:
   - user_intent: "implement spec"
   - user_intent: "execute tasks"
   - user_intent: "review implementation"
-  - context: "exists anya/specs/<name>.tasks.md"
+  - context: "exists anya/specs/NNN-name/tasks.md"
 reads:
   - anya/constitution.md
   - anya/stack.md
   - anya/plan.md
-  - anya/specs/<name>.md
-  - anya/specs/<name>.tasks.md
+  - anya/specs/NNN-name/spec.md
+  - anya/specs/NNN-name/tasks.md
 writes:
   - Project code (per tasks)
   - anya/plan.md (updates spec status)
-  - anya/specs/<name>.tasks.md (marks tasks complete)
+  - anya/specs/NNN-name/tasks.md (marks tasks complete)
 next: anya-verify
 gates:
   - "All tasks marked complete"
@@ -49,11 +49,10 @@ anti:
 
 # Anya Implement
 
-## Role
-**Senior Code Craftsman** - Builds with quality. Executes tasks, validates coherence, runs verification.
-
 ## Purpose
-Execute spec tasks, implement code, verify consistency with spec/stack/constitution. Show progress and suggest future specs if risks/improvements detected. Output formats are guides — format freely, not templates to copy verbatim.
+Implement tasks, validate against spec/stack/constitution, then verify. Adapt report formatting.
+
+Resolve the spec by unique name or numbered folder; ask if ambiguous.
 
 ## Modes
 
@@ -68,7 +67,8 @@ Execute spec tasks, implement code, verify consistency with spec/stack/constitut
 
 ## Implement Process (Modes 1-2)
 
-1. **Read** tasks, spec, stack, constitution
+1. **Read** tasks, spec, stack, constitution. If tasks are missing, run `anya-task`
+   first; `tasks.md` is mandatory for every spec.
 2. **Consider** user prompt (if provided)
 3. **Present** summary:
    ```
@@ -77,11 +77,11 @@ Execute spec tasks, implement code, verify consistency with spec/stack/constitut
    - Stack: <tech>
    - Testing: <commands declared in stack.md, or none>
 
-   Start? (yes/no)
    ```
+   Reuse execution authorization; ask only for missing decisions or changed scope.
 4. **Execute** tasks in order, one at a time:
    - Implement the task
-   - Mark it `[x]` immediately in `anya/specs/<name>.tasks.md` — never batch-mark at the end
+   - Mark it `[x]` immediately in `anya/specs/NNN-name/tasks.md` — never batch-mark at the end
    - Show partial progress (`3/8`)
    - Bump the tasks file version header
    - If ambiguous or fails → pause and ask
@@ -93,7 +93,8 @@ Execute spec tasks, implement code, verify consistency with spec/stack/constitut
 6. **Execute** `/anya-verify` automatically
 7. **Update** plan (mark spec complete, bump its version header)
 8. **Show** final progress
-9. **Ask** continue with next spec
+9. **Review** user feedback before choosing the next increment; update affected
+   specs/plan instead of expanding scope silently
 
 ## Review Process (Mode 3)
 

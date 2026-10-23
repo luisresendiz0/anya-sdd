@@ -1,12 +1,12 @@
 # Quick Start Guide
 
-End-to-end workflow using Anya-SDD v0.5.0.
+End-to-end workflow using Anya-SDD v0.6.0.
 
 ## Setup
 
 ```bash
 # 1. Copy the skills into your project
-git clone https://github.com/luisresendiz0/anya-ssd.git /tmp/anya-sdd
+git clone https://github.com/luisresendiz0/anya-sdd.git /tmp/anya-sdd
 cp -r /tmp/anya-sdd/.anya /your-project/
 cd /your-project
 
@@ -106,18 +106,25 @@ The agent will:
 
 Repeat for **every spec**.
 
+Detail the next usable increment when ready to build it; leave later work as
+backlog entries. After trying each delivery, adjust the next step from feedback.
+
 ### 4. Generate a spec
 
 ```bash
 /anya-spec next
 ```
 
-**Output:** `anya/specs/<name>.md`
+**Output:** `anya/specs/NNN-name/spec.md`
 
 The agent will:
 - Identify the next pending spec
 - Decide Mini-Spec (3 sections) or Full-Spec (9 sections)
 - Generate it and request approval
+
+Folders are numbered in creation order: `001-auth`, `002-login`, etc. Existing
+specs keep their folder when updated. Names in commands can be unique spec names
+(`login`) or numbered folders (`002-login`).
 
 ### 5. Generate tasks
 
@@ -125,7 +132,8 @@ The agent will:
 /anya-task <spec-name>
 ```
 
-**Output:** `anya/specs/<name>.tasks.md`
+**Output:** `anya/specs/NNN-name/tasks.md`, beside its `spec.md`.
+Required for every spec, including Mini-Specs; use only the tasks the work needs.
 
 Each task gets:
 - A clear action
@@ -165,7 +173,7 @@ The agent will:
 **Example verification output:**
 
 ```
-Spec completed: login.md
+Spec completed: 002-login/spec.md
 
 Verification
   Level 1  Tasks          8/8
@@ -181,9 +189,9 @@ Suggested Specs
 2. Login logging      → /anya-spec logging all login attempts...
 
 Progress
-  auth-basic.md   done
-  login.md        just finished
-  register.md     next
+  001-auth/       done
+  002-login/      just finished
+  003-register/   next
 ```
 
 If `stack.md` declares no testing, Level 5 is reported as `N/A`.
@@ -321,14 +329,22 @@ anya/
 ├── stack.md           # Technologies + testing + commands
 ├── plan.md            # Specs in phases
 └── specs/
-    ├── auth-basic.md
-    ├── auth-basic.tasks.md
-    ├── login.md
-    ├── login.tasks.md
+    ├── 001-auth/
+    │   ├── spec.md
+    │   └── tasks.md
+    ├── 002-login/
+    │   ├── spec.md
+    │   └── tasks.md
     └── ...
 ```
 
 All files are git-trackable and human-readable.
+
+For existing flat specs, move each `<name>.md` / `<name>.tasks.md` pair into a
+numbered folder as `spec.md` / `tasks.md`. Use the current plan order for the
+initial migration; preserve existing numbered folders, append unused numbers,
+and update affected links and references. Keep content and task checkboxes;
+resolve conflicts before moving files and never overwrite a destination.
 
 ## Next Steps
 

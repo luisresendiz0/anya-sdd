@@ -205,14 +205,14 @@
       role: "Product-Minded Tech Lead",
       loop: "repeats per feature",
       desc: "Pick the next pending spec and decide between a 3-section Mini-Spec and a 9-section Full-Spec based on complexity and impact — then tell you which it chose.",
-      output: "anya/specs/<name>.md",
+      output: "anya/specs/NNN-name/spec.md",
     },
     {
       skill: "anya-task",
       role: "Agile Implementation Strategist",
       loop: "repeats per feature",
       desc: "Turn the spec into ordered tasks. Every task gets a clear action, the file(s) to create or modify, and its explicit dependencies.",
-      output: "anya/specs/<name>.tasks.md",
+      output: "anya/specs/NNN-name/tasks.md",
     },
     {
       skill: "anya-implement",

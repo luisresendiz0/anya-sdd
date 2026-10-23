@@ -6,18 +6,18 @@ description: >
   tests when declared in anya/stack.md). Detects risks, suggests improvements,
   proposes future specs with detailed prompts. Runs automatically after
   anya-implement or manually to re-verify.
-version: 0.5.0
+version: 0.6.0
 triggers:
   - user_intent: "verify implementation"
   - user_intent: "check quality"
   - context: "implementation completed (automatic)"
-  - context: "exists anya/specs/<name>.md implemented"
+  - context: "exists anya/specs/NNN-name/spec.md implemented"
 reads:
   - anya/constitution.md
   - anya/stack.md
   - anya/plan.md
-  - anya/specs/<name>.md
-  - anya/specs/<name>.tasks.md
+  - anya/specs/NNN-name/spec.md
+  - anya/specs/NNN-name/tasks.md
 writes: []
 next: anya-spec (if continuing)
 gates:
@@ -46,13 +46,12 @@ anti:
 
 # Anya Verify
 
-## Role
-**Quality Assurance Architect** - Validates across 5 levels, detects risks, suggests improvements with actionable prompts.
-
 ## Purpose
-Validate spec implementation is correct, consistent, complete. Detect risks, suggest improvements, propose future specs with ready-to-execute prompts.
+Validate implementation; report risks and actionable next specs.
 
 **Note:** Runs automatically after `/anya-implement`, or manually.
+
+Resolve the spec by unique name or numbered folder; ask if ambiguous.
 
 ## Modes
 
@@ -73,7 +72,7 @@ Validate spec implementation is correct, consistent, complete. Detect risks, sug
 
 | Level | Validate | How |
 |-------|----------|-----|
-| 1 | Tasks completed | All tasks in `.tasks.md` marked |
+| 1 | Tasks completed | All tasks in `tasks.md` marked |
 | 2 | Spec fulfilled | Cross-reference requirements + criteria with implementation |
 | 3 | Stack consistency | Uses technologies from `anya/stack.md` |
 | 4 | Constitution consistency | Respects business rules + NOT list |
@@ -114,7 +113,7 @@ For each risk/improvement, suggest spec with **detailed, actionable** prompt:
 Format freely — this is a guide, not a template to copy verbatim.
 
 ```
-✓ Implementation completed: <name>.md
+✓ Implementation completed: NNN-name/spec.md
 
 ━━━━━━━━━━━━━━━━━━━━━━
 Verification

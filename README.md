@@ -51,7 +51,7 @@ The first three steps run **once per project**. The rest repeat for every featur
 ### 1. Get the skills
 
 ```bash
-git clone https://github.com/luisresendiz0/anya-ssd.git /tmp/anya-sdd
+git clone https://github.com/luisresendiz0/anya-sdd.git /tmp/anya-sdd
 cp -r /tmp/anya-sdd/.anya /your-project/
 cd /your-project
 ```
@@ -121,9 +121,21 @@ your-project/
     ├── stack.md
     ├── plan.md
     └── specs/
-        ├── login.md
-        └── login.tasks.md
+        ├── 001-auth/
+        │   ├── spec.md
+        │   └── tasks.md
+        ├── 002-login/
+        │   ├── spec.md
+        │   └── tasks.md
+        └── 003-dashboard/
+            ├── spec.md
+            └── tasks.md
 ```
+
+Each spec gets a numbered folder (`001`, `002`, …), containing `spec.md` and
+mandatory `tasks.md` before implementation, including Mini-Specs. New specs use
+the next number; updates reuse the existing folder. Commands accept a unique name
+(`login`) or folder (`002-login`).
 
 Every artifact starts with `> version: N · updated: YYYY-MM-DD`, so you can tell at
 a glance how old it is and whether it was re-generated.
@@ -146,6 +158,11 @@ a glance how old it is and whether it was re-generated.
 - **Full-Spec** — 9 sections. For architecture changes, integrations, multi-component work.
 
 The skill picks the size from complexity and impact, and tells you which one it chose.
+
+Keep the plan as a lightweight backlog and detail the next usable increment just
+before building it. Mini-Spec is the default; task lists scale to the work and
+always live in `tasks.md`. After trying each increment, use feedback to adjust
+the next one and update affected decisions.
 
 ## Tests
 

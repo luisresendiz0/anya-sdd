@@ -5,7 +5,7 @@ description: >
   Defines technical stack and testing strategy. NO assumptions about architecture
   or ecosystem. Generates anya/stack.md. Activates when constitution exists and
   user wants to define technologies.
-version: 0.5.0
+version: 0.6.0
 triggers:
   - user_intent: "define stack"
   - user_intent: "choose technologies"
@@ -34,9 +34,6 @@ anti:
 ---
 
 # Anya Stack
-
-## Role
-**Pragmatic Systems Architect** - Defines how, not what. Technology decisions based on needs, not assumptions.
 
 ## Purpose
 Define technologies, frameworks, tools, testing strategy. Critical decision affecting all future specs.

@@ -5,14 +5,14 @@ description: >
   Generates specific, self-contained specs. Decides Mini-Spec (3 sections) vs
   Full-Spec (9 sections) based on complexity. Activates when plan exists and user
   wants to generate next spec or specific spec.
-version: 0.5.0
+version: 0.6.0
 triggers:
   - user_intent: "generate next spec"
   - user_intent: "generate specific spec"
   - user_intent: "update existing spec"
   - context: "exists anya/plan.md"
 reads: [anya/constitution.md, anya/stack.md, anya/plan.md]
-writes: [anya/specs/<name>.md]
+writes: [anya/specs/NNN-name/spec.md]
 next: anya-task
 gates:
   - "Coherent with constitution and stack"
@@ -24,9 +24,9 @@ gates:
   - "Spec type (Mini/Full) matches complexity"
   - "Respects constitution NOT list"
   - "New specs outside the plan are defined by asking, not assumed"
-  - "Version header present in anya/specs/<name>.md"
+  - "Version header present in anya/specs/NNN-name/spec.md"
 exit:
-  - "Spec generated at anya/specs/<name>.md"
+  - "Spec generated at anya/specs/NNN-name/spec.md"
   - "All required sections complete"
   - "User approves spec"
 anti:
@@ -41,11 +41,8 @@ anti:
 
 # Anya Spec
 
-## Role
-**Product-Minded Tech Lead** - Translates requirements into actionable specs. Balances detail with simplicity.
-
 ## Purpose
-Generate specific, self-contained specs. Source of truth for implementation.
+Implementation source of truth.
 
 ## Modes
 
@@ -54,7 +51,7 @@ Generate specific, self-contained specs. Source of truth for implementation.
 - Generate it
 
 **Multiple specs:** `/anya-spec next 3`
-- Generate next 3 pending specs
+- Generate next 3 pending specs only when explicitly requested
 
 **Specific spec:** `/anya-spec login`
 - Generate spec by name (must be in plan)
@@ -64,23 +61,24 @@ Generate specific, self-contained specs. Source of truth for implementation.
 - Generate spec, then suggest updating the plan
 
 **Update spec:** `/anya-spec update login to include Google OAuth`
-- Re-generate preserving unchanged parts
+- Re-generate in the same folder, preserving unchanged parts
 - Show diff summary
+
+## Storage
+
+Use `anya/specs/NNN-name/spec.md`; tasks share its folder. Reuse matching folders.
+New folders take the highest existing prefix + 1, padded to at least three digits
+(start `001`). Never renumber. Resolve by unique name or folder; ask if ambiguous.
 
 ## Spec Type Decision
 
-Auto-decide based on:
+Default to Mini-Spec for the next usable increment; expand only for complexity:
 
 | Factor | Mini-Spec | Full-Spec |
 |--------|-----------|-----------|
 | Complexity | Simple (1-2 changes) | Complex (multiple changes, architecture) |
 | Impact | Local (no other parts) | Global (multiple components) |
 | Description | "Fix bug in..." | "Implement feature for..." |
-
-If unsure, ask:
-```
-Mini-Spec (simple) or Full-Spec (complex)?
-```
 
 Both structures below are guides — format freely, not templates to copy verbatim.
 
@@ -107,7 +105,7 @@ Both structures below are guides — format freely, not templates to copy verbat
 
 ## Full-Spec Structure (9 sections)
 
-```markdown
+````markdown
 # <Spec name>
 > version: 1 · updated: <YYYY-MM-DD>
 
@@ -151,7 +149,7 @@ E2E tests:
 ## What It Does NOT Include
 - <Exclusion 1>
 - <Exclusion 2>
-```
+````
 
 **Use for:** Complex features, architecture changes, external integrations, large refactorings
 
@@ -160,7 +158,7 @@ E2E tests:
 ### For Plan Specs (Modes 1-3)
 1. **Read** plan
 2. **Identify** pending specs
-3. **Ask** confirmation: "Generate spec for [name]? (yes/no)"
+3. **Confirm** only unresolved scope; reuse existing authorization
 4. **Generate** spec
 
 ### For New Spec (Mode 4)
@@ -181,5 +179,5 @@ Before generating, check against constitution:
 ```
 Constitution: "No Slack integration"
 Proposed: "Slack integration for notifications"
-→ REJECT: Violates constitution
+→ Flag conflict; reconcile an explicit scope change before implementation
 ```

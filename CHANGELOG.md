@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.6.0] - 2026-10-22
+
+### Numbered Specs & Incremental Delivery
+
+### Changed
+
+- Specs now live in numbered folders: `anya/specs/001-name/spec.md`, with
+  `tasks.md` beside them. New specs receive the next number; updates keep it.
+- Updated downstream skill paths, name resolution, and documentation examples.
+- Plans stay lightweight; specs are detailed just before implementing a small,
+  usable increment. Mini-Spec is the default; feedback guides the next delivery.
+- `tasks.md` remains mandatory for every spec. Task counts scale to the work;
+  existing authorization is reused, and TDD is supported.
+- Removed repeated role descriptions and task examples to keep skill text small.
+
+### Fixed
+
+- Corrected the clone URL in README and QUICKSTART to match `anya-sdd`.
+- Fixed nested Markdown fences in the Full-Spec example.
+
+### Migration
+
+- Replace the seven installed skill folders with this version.
+- Move each flat `<name>.md` / `<name>.tasks.md` pair into a numbered folder as
+  `spec.md` / `tasks.md`, following the existing plan order. Preserve already
+  numbered folders, content, and checked tasks; update affected links and references.
+- See [QUICKSTART.md](./QUICKSTART.md#output-files) for migration details.
+
 ## [0.5.0] - 2026-10-20
 
 ### 🧱 Structure & Portability Release
@@ -136,3 +164,4 @@ Framework concept, basic workflow, skill structure proposal.
 | 0.3.0 | 2026-01-19 | Role-based architecture, triggers, gates |
 | 0.4.0 | 2026-01-19 | English rewrite, token optimization |
 | 0.5.0 | 2026-10-20 | SKILL.md layout, relative paths, ecosystem-agnostic testing |
+| 0.6.0 | 2026-10-22 | Numbered spec folders, incremental delivery, mandatory task files |
