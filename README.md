@@ -4,9 +4,11 @@
 
 **Spec-Driven Development that fits in seven markdown files.**
 
-Anya turns "build me X" into a short, auditable pipeline: constitution → stack →
-plan → spec → tasks → code → verification. Each step validates the previous one,
-so the agent can't quietly drift from what you actually asked for.
+Anya turns "build me X" into an auditable, agile pipeline: constitution → stack →
+plan → spec → tasks → code → verification. Every deliverable is an **End-to-End
+Vertical Slice** (UI/CLI + logic + state + tests): no broken intermediate states,
+no horizontal waterfall layers, and 100% runnable from day one starting with a
+functional Walking Skeleton.
 
 No runtime. No dependencies. No lock-in. Just `.md` files your agent can read and
 your team can review.
@@ -18,17 +20,21 @@ your team can review.
 ## Why
 
 AI agents are fast, but they drift. Without a written source of truth they invent
-requirements, forget constraints, and ship code that "works" but doesn't match the
-brief.
+requirements, forget constraints, construct disconnected horizontal layers that
+never run together, and ship code that "works" only on paper.
 
-Anya fixes that with three habits:
+Anya fixes that with four core habits:
 
 1. **Write the intent once.** Vision, stack, and plan live in files — not in a chat
    that disappears.
-2. **Validate every step.** Specs can't contradict the constitution. Tasks can't
-   invent files. Verification can't assume tests that don't exist.
-3. **Close the loop.** Every implementation ends with a verification pass that
-   suggests the next spec.
+2. **Vertical Slices only.** Every spec delivers working user value end-to-end.
+   Spec 001 is a functional Walking Skeleton; the app is 100% executable and usable
+   from the start.
+3. **Real-time visibility.** Tasks communicate progress dynamically (`[ ]` pending,
+   `[/]` in progress, `[x]` completed).
+4. **Interactive live verification with mandatory pause.** Implementations compile,
+   start cleanly, run 6-level verification, generate an Interactive Live Testing Guide,
+   and **halt completely** for human verification before proceeding.
 
 ## How it works
 
@@ -42,9 +48,10 @@ Anya fixes that with three habits:
                                /anya-implement   │
                                       ↓          │
                                 /anya-verify ────┘
+                         (halts for user live test)
 ```
 
-The first three steps run **once per project**. The rest repeat for every feature.
+The first three steps run **once per project**. The rest repeat for every deliverable.
 
 ## Try it in 2 minutes
 
@@ -69,8 +76,7 @@ cp -r .anya/anya-* ~/.config/opencode/skills/
 # cp -r .anya/anya-* ~/.claude/skills/
 ```
 
-Each `.anya/anya-<skill>/SKILL.md` already follows the standard layout, so it works
-without edits.
+Each `.anya/anya-<skill>/SKILL.md` follows standard layout for instant auto-discovery.
 
 **Project mode (no global install):** add this to your `AGENTS.md` or equivalent:
 
@@ -86,7 +92,7 @@ This project uses Anya-SDD. Before writing code, read
 Need projects by client, time tracking, monthly reports, PDF invoicing.
 No real-time collaboration or payments.
 
-/anya-stack TypeScript + Express + PostgreSQL. React + Tailwind.
+/anya-stack TypeScript + Express + PostgreSQL backend. React frontend.
 
 /anya-plan
 ```
@@ -95,11 +101,12 @@ No real-time collaboration or payments.
 
 ```bash
 /anya-spec next
-/anya-task login
-/anya-implement login
+/anya-task 001-task-create-view
+/anya-implement 001-task-create-view
 ```
 
-`/anya-implement` runs `/anya-verify` automatically and suggests what to build next.
+`/anya-implement` runs `/anya-verify` automatically, confirms build/runtime health,
+generates a step-by-step Interactive Live Testing Guide, and pauses for your approval.
 
 > `/anya-…` is the name of each skill. If your agent doesn't support slash commands,
 > ask it to load the matching skill by name — the result is the same.
@@ -121,55 +128,43 @@ your-project/
     ├── stack.md
     ├── plan.md
     └── specs/
-        ├── 001-auth/
+        ├── 001-task-create-view/
         │   ├── spec.md
         │   └── tasks.md
-        ├── 002-login/
+        ├── 002-task-toggle-status/
         │   ├── spec.md
         │   └── tasks.md
-        └── 003-dashboard/
+        └── 003-task-search-filter/
             ├── spec.md
             └── tasks.md
 ```
 
 Each spec gets a numbered folder (`001`, `002`, …), containing `spec.md` and
-mandatory `tasks.md` before implementation, including Mini-Specs. New specs use
-the next number; updates reuse the existing folder. Commands accept a unique name
-(`login`) or folder (`002-login`).
-
-Every artifact starts with `> version: N · updated: YYYY-MM-DD`, so you can tell at
-a glance how old it is and whether it was re-generated.
+mandatory `tasks.md`. Every artifact starts with `> version: N · updated: YYYY-MM-DD`.
 
 ## Skills
 
 | Skill | Role | Purpose |
 |-------|------|---------|
-| `anya-constitution` | Visionary Product Architect | Vision, scope, rules, exclusions |
-| `anya-stack` | Pragmatic Systems Architect | Tech stack + testing strategy |
-| `anya-plan` | Strategic Delivery Lead | Specs organized in phases |
-| `anya-spec` | Product-Minded Tech Lead | Mini or Full spec |
-| `anya-task` | Agile Implementation Strategist | Spec → ordered tasks |
-| `anya-implement` | Senior Code Craftsman | Build, task by task |
-| `anya-verify` | Quality Assurance Architect | Validate + suggest next |
+| `anya-constitution` | Visionary Product Architect | Problem, user capabilities, rules, exclusions |
+| `anya-stack` | Pragmatic Systems Architect | Tech stack, run/dev commands, testing strategy |
+| `anya-plan` | Strategic Delivery Lead | End-to-end vertical slices & Walking Skeleton |
+| `anya-spec` | Product-Minded Tech Lead | Complete Vertical Slice or Flexible Spec |
+| `anya-task` | Agile Implementation Strategist | Atomic tasks, real-time `[/]`, live test task |
+| `anya-implement` | Senior Code Craftsman | Build, task by task, runtime health validation |
+| `anya-verify` | Quality Assurance Architect | 6 levels, Live Testing Guide & mandatory pause |
 
-## Two spec sizes
+## Proportional Spec Sizing
 
-- **Mini-Spec** — 3 sections. For fixes, small features, one component.
-- **Full-Spec** — 9 sections. For architecture changes, integrations, multi-component work.
+- **Complete Vertical Slice Spec** — 6 sections. For medium/large features, new user flows, and Walking Skeletons. Defines User Value, E2E Layers (UI/Logic/Data), Acceptance Criteria, Live Verification Steps, Tests, and Exclusions.
+- **Flexible Lightweight Spec** — 4 sections. For quick bug fixes, evolutionary refinements, and minor tweaks.
 
-The skill picks the size from complexity and impact, and tells you which one it chose.
+## Tests & Execution Commands
 
-Keep the plan as a lightweight backlog and detail the next usable increment just
-before building it. Mini-Spec is the default; task lists scale to the work and
-always live in `tasks.md`. After trying each increment, use feedback to adjust
-the next one and update affected decisions.
-
-## Tests
-
-Testing is defined once, in `anya/stack.md`, together with the **exact command** to
-run. Anya never assumes a framework: a Java API, a Python CLI, or a Go service
-records the tools that fit its own ecosystem. If a project declares no testing,
-verification marks that level as N/A instead of inventing tests.
+`anya/stack.md` defines both the **exact startup command** (`Run / Dev`) to launch
+the application for live testing and the **exact test commands**. Anya never assumes
+frameworks: a Go API, a Python CLI, or a Node app records the tools matching its
+own ecosystem.
 
 ## Changing your mind
 
@@ -177,14 +172,15 @@ verification marks that level as N/A instead of inventing tests.
 |---|---|
 | Constitution | Edit it, re-run `/anya-plan`, regenerate affected specs |
 | Stack | Edit it, regenerate affected specs |
-| Plan | Add or remove specs incrementally |
-| Spec | `/anya-spec update <name>` |
+| Plan | Add or remove vertical slices incrementally |
+| Spec | `/anya-spec update <name>` or `/anya-spec fix <issue>` |
 
 ## Philosophy
 
+- **Vertical Slices** — user value and working code from increment 1.
 - **Zero dependencies** — only markdown.
 - **Portable** — any agent that reads files can run it.
-- **Pragmatic** — decisions, not blind automation.
+- **Pragmatic** — decisions and human verification, not blind automation.
 - **Minimal** — seven skills, no ceremony.
 - **Token-efficient** — imperative English, no filler.
 

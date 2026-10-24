@@ -62,12 +62,12 @@
       <div class="hero-glow" aria-hidden="true"></div>
       <div class="container hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow"><span class="dot"></span> Spec-Driven Development · v0.6.0</p>
+          <p class="eyebrow"><span class="dot"></span> Spec-Driven Development · v0.7.0</p>
           <h1>Ship what you <span class="highlight">actually</span> asked for.</h1>
           <p class="lead">
             AI agents drift. Anya-SDD turns “build me X” into a short, auditable pipeline:
             <strong>constitution → stack → plan → spec → tasks → code → verification</strong>.
-            Seven markdown files. No runtime. No dependencies. No lock-in.
+            End-to-End Vertical Slices. Live interactive verification. Seven markdown files.
           </p>
           <div class="hero-actions">
             <a href="#quickstart" class="btn btn-primary">
@@ -91,7 +91,7 @@
             <div class="mascot-ring" aria-hidden="true"></div>
             <img src="assets/anya.png" alt="Anya, the project mascot" class="mascot-img" width="360" height="360">
             <div class="float-chip chip-1">constitution.md</div>
-            <div class="float-chip chip-2">✓ verified</div>
+            <div class="float-chip chip-2">✓ verified live</div>
             <div class="float-chip chip-3">0 deps</div>
           </div>
 
@@ -100,11 +100,11 @@
               <span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span>
               <span class="terminal-title">your-agent</span>
             </div>
-            <pre class="terminal-body"><code><span class="t-prompt">$</span> <span class="t-cmd" data-typing="/anya-implement login">/anya-implement login</span><span class="cursor" data-cursor aria-hidden="true"></span>
-<span class="t-out" data-reveal>◆ Spec: 002-login/spec.md · Full-Spec · 9 sections</span>
-<span class="t-out" data-reveal><span class="t-ok">✓</span> Tasks 8/8 · marked one at a time</span>
-<span class="t-out" data-reveal><span class="t-ok">✓</span> Verification 5/5 levels passed</span>
-<span class="t-out t-muted" data-reveal>→ next: /anya-spec register</span></code></pre>
+            <pre class="terminal-body"><code><span class="t-prompt">$</span> <span class="t-cmd" data-typing="/anya-implement 001-task-create-view">/anya-implement 001-task-create-view</span><span class="cursor" data-cursor aria-hidden="true"></span>
+<span class="t-out" data-reveal>◆ Spec: 001-task-create-view/spec.md · Vertical Slice</span>
+<span class="t-out" data-reveal><span class="t-ok">✓</span> Tasks 3/3 · real-time tracking ([/], [x])</span>
+<span class="t-out" data-reveal><span class="t-ok">✓</span> Verification 6/6 levels · Runtime healthy</span>
+<span class="t-out t-muted" data-reveal>→ Live Testing Guide ready · Paused for human approval</span></code></pre>
           </div>
         </div>
       </div>
@@ -113,8 +113,8 @@
         <ul class="stats" id="stats">
           <li><span class="stat-value" data-count="7">0</span><span class="stat-label">markdown skills</span></li>
           <li><span class="stat-value" data-count="0">0</span><span class="stat-label">runtime dependencies</span></li>
-          <li><span class="stat-value" data-count="5">0</span><span class="stat-label">verification levels</span></li>
-          <li><span class="stat-value" data-count="35" data-suffix="%">0</span><span class="stat-label">fewer lines in v0.5</span></li>
+          <li><span class="stat-value" data-count="6">0</span><span class="stat-label">verification levels</span></li>
+          <li><span class="stat-value" data-count="100" data-suffix="%">0</span><span class="stat-label">runnable slices</span></li>
         </ul>
       </div>
     </section>
@@ -253,31 +253,31 @@
             <div class="skill-top"><span class="skill-icon" aria-hidden="true">🗺️</span><span class="skill-idx">03</span></div>
             <h3>plan</h3>
             <p class="skill-role">Strategic Delivery Lead</p>
-            <p>Specs organized in dependency-aware phases.</p>
+            <p>End-to-end vertical slices starting with a Walking Skeleton.</p>
           </article>
           <article class="skill reveal">
             <div class="skill-top"><span class="skill-icon" aria-hidden="true">📄</span><span class="skill-idx">04</span></div>
             <h3>spec</h3>
             <p class="skill-role">Product-Minded Tech Lead</p>
-            <p>Mini or Full spec, chosen by complexity.</p>
+            <p>Complete Vertical Slice or Flexible Spec with live test steps.</p>
           </article>
           <article class="skill reveal">
             <div class="skill-top"><span class="skill-icon" aria-hidden="true">✅</span><span class="skill-idx">05</span></div>
             <h3>task</h3>
             <p class="skill-role">Agile Implementation Strategist</p>
-            <p>Spec → ordered tasks with files and dependencies.</p>
+            <p>Atomic tasks, real-time [/] tracking, and live test task.</p>
           </article>
           <article class="skill reveal">
             <div class="skill-top"><span class="skill-icon" aria-hidden="true">🛠️</span><span class="skill-idx">06</span></div>
             <h3>implement</h3>
             <p class="skill-role">Senior Code Craftsman</p>
-            <p>Builds task by task, marking progress as it goes.</p>
+            <p>Builds task by task, validates runtime startup, pauses for test.</p>
           </article>
           <article class="skill reveal">
             <div class="skill-top"><span class="skill-icon" aria-hidden="true">🔍</span><span class="skill-idx">07</span></div>
             <h3>verify</h3>
             <p class="skill-role">Quality Assurance Architect</p>
-            <p>Validates all levels and suggests what’s next.</p>
+            <p>6 levels, Live Testing Guide, and mandatory human pause.</p>
           </article>
           <article class="skill skill-cta reveal">
             <h3>Portable by design</h3>
@@ -289,31 +289,32 @@
         <div class="spec-sizes">
           <article class="spec-card">
             <div class="spec-head">
-              <span class="spec-badge">Mini-Spec</span>
-              <span class="spec-count">3 sections</span>
+              <span class="spec-badge">Flexible Spec</span>
+              <span class="spec-count">4 sections</span>
             </div>
-            <p>For fixes, small features, one component. Fast to write, fast to review.</p>
+            <p>For fixes, evolutives, and small tweaks. Fast to write, quick to test.</p>
             <ul class="check-list">
-              <li>Goal &amp; scope</li>
-              <li>Acceptance criteria</li>
-              <li>Out of scope</li>
+              <li>Context &amp; objective</li>
+              <li>Targeted change &amp; expected behavior</li>
+              <li>Criteria &amp; live verification</li>
+              <li>What it does NOT include</li>
             </ul>
           </article>
           <article class="spec-card spec-card--featured">
             <div class="spec-head">
-              <span class="spec-badge spec-badge--strong">Full-Spec</span>
-              <span class="spec-count">9 sections</span>
+              <span class="spec-badge spec-badge--strong">Complete Vertical Slice</span>
+              <span class="spec-count">6 sections</span>
             </div>
-            <p>For architecture changes, integrations, and multi-component work.</p>
+            <p>For new features, full user flows, and Walking Skeletons.</p>
             <ul class="check-list">
-              <li>Context &amp; constraints</li>
-              <li>Flows, data &amp; edge cases</li>
-              <li>Acceptance criteria per requirement</li>
-              <li>Risks, rollout &amp; exclusions</li>
+              <li>Context &amp; User Value</li>
+              <li>End-to-End Scope (UI/CLI, Logic, Data)</li>
+              <li>Acceptance criteria &amp; live test steps</li>
+              <li>Required tests &amp; exclusions</li>
             </ul>
           </article>
         </div>
-        <p class="center-note">The skill picks the size from complexity and impact — and tells you which one it chose.</p>
+        <p class="center-note">The skill adapts between full vertical slices and lightweight specs according to scope.</p>
       </div>
     </section>
 
@@ -484,45 +485,42 @@ No real-time collaboration or payments.
       <div class="container verify-grid">
         <div class="verify-copy">
           <p class="eyebrow">Verification</p>
-          <h2>Five levels. No invented tests.</h2>
+          <h2>Six levels. Live interactive testing.</h2>
           <p class="section-lead">
-            Verification runs in cascade, and reports every level as it checks it. If
-            <code>stack.md</code> declares no testing, Level 5 is honestly reported as
-            <span class="mono-badge">N/A</span> instead of making something up.
+            Verification checks every level, confirms build and runtime startup health, generates
+            an Interactive Live Testing Guide, and halts execution for human validation.
           </p>
           <ol class="levels">
-            <li><span class="level-num">L1</span><div><strong>Tasks</strong><span>All tasks completed and marked incrementally.</span></div></li>
-            <li><span class="level-num">L2</span><div><strong>Spec</strong><span>Every requirement met.</span></div></li>
-            <li><span class="level-num">L3</span><div><strong>Stack</strong><span>Implementation consistent with the declared stack.</span></div></li>
-            <li><span class="level-num">L4</span><div><strong>Constitution</strong><span>No rule or exclusion violated.</span></div></li>
-            <li><span class="level-num">L5</span><div><strong>Tests</strong><span>Exact commands from <code>stack.md</code> — or N/A.</span></div></li>
+            <li><span class="level-num">L1</span><div><strong>Tasks</strong><span>Marked dynamically ([ ], [/], [x]).</span></div></li>
+            <li><span class="level-num">L2</span><div><strong>Spec</strong><span>Vertical slice criteria and user value met.</span></div></li>
+            <li><span class="level-num">L3</span><div><strong>Stack</strong><span>Implementation conforms to declared stack.</span></div></li>
+            <li><span class="level-num">L4</span><div><strong>Constitution</strong><span>Business rules and exclusions respected.</span></div></li>
+            <li><span class="level-num">L5</span><div><strong>Runtime</strong><span>Compiles and launches cleanly with run/dev command.</span></div></li>
+            <li><span class="level-num">L6</span><div><strong>Tests</strong><span>Exact test commands from <code>stack.md</code> — or N/A.</span></div></li>
           </ol>
         </div>
 
         <div class="terminal verify-terminal" aria-label="Example verification report">
           <div class="terminal-bar">
             <span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span class="terminal-title">/anya-verify login</span>
+            <span class="terminal-title">/anya-verify 001-task-create-view</span>
           </div>
-          <pre class="terminal-body"><code><span class="r-title">Spec completed: 002-login/spec.md</span>
+          <pre class="terminal-body"><code><span class="r-title">Spec completed: 001-task-create-view/spec.md</span>
 
 <span class="r-head">Verification</span>
-  Level 1  Tasks          <span class="r-ok">8/8</span>
-  Level 2  Spec           <span class="r-ok">5/5 requirements met</span>
+  Level 1  Tasks          <span class="r-ok">3/3</span>
+  Level 2  Spec           <span class="r-ok">Vertical slice criteria met</span>
   Level 3  Stack          <span class="r-ok">consistent</span>
   Level 4  Constitution   <span class="r-ok">consistent</span>
-  Level 5  Tests          <span class="r-ok">6/6 pass</span>
+  Level 5  Runtime        <span class="r-ok">compiles &amp; starts cleanly</span>
+  Level 6  Tests          <span class="r-ok">4/4 pass</span>
 
-<span class="r-warn">Risks: 1</span>    <span class="r-info">Improvements: 2</span>
+<span class="r-head">Live Testing Guide</span>
+  1. $ npm run dev
+  2. Open http://localhost:3000
+  3. Create task "Buy milk" → Confirm listed
 
-<span class="r-head">Suggested specs</span>
-1. Rate limiting    → /anya-spec global rate limiting...
-2. Login logging    → /anya-spec logging all login attempts...
-
-<span class="r-head">Progress</span>
-  001-auth/      <span class="r-muted">done</span>
-  002-login/     <span class="r-ok">just finished</span>
-  003-register/  <span class="r-info">next</span></code></pre>
+<span class="r-warn">Paused for human live verification approval</span></code></pre>
         </div>
       </div>
     </section>
@@ -603,6 +601,16 @@ No real-time collaboration or payments.
         </div>
 
         <ol class="timeline">
+          <li class="timeline-item reveal">
+            <span class="timeline-version">v0.7.0</span>
+            <div class="timeline-body">
+              <div class="timeline-head">
+                <h3>Agile vertical slices &amp; live verification</h3>
+                <time datetime="2026-10-23">Oct 23, 2026</time>
+              </div>
+              <p>Strictly end-to-end vertical slices starting with a functional Walking Skeleton. Dynamic task tracking (<code>[/]</code>), 6-level verification including build/runtime health, and mandatory pause with an Interactive Live Testing Guide.</p>
+            </div>
+          </li>
           <li class="timeline-item reveal">
             <span class="timeline-version">v0.6.0</span>
             <div class="timeline-body">

@@ -3,9 +3,9 @@
 > version: 1 · updated: 2026-10-23
 
 ## Estado Actual del Proyecto
-- **Entregable Actual**: Entregable 2 - Motor de Descomposición, Ejecución y Verificación Interactiva (`anya-task`, `anya-implement`, `anya-verify`, `anya-stack`, `anya-constitution`) [COMPLETADO - Esperando Verificación del Usuario]
-- **Valor Aportado**: El motor de ejecución ahora descompone verticalmente cada spec con visibilidad de estados en tiempo real (`[ ]`, `[/]`, `[x]`), captura comandos de arranque en stack, valida compilación y arranque de runtime en verify, y genera la Guía de Prueba Interactiva en Vivo con parada obligatoria antes de continuar.
-- **Siguiente Entregable**: Entregable 3 - Documentación Global del Framework y Landing Page Web (`README.md`, `QUICKSTART.md`, `CHANGELOG.md`, `docs/index.html`).
+- **Entregable Actual**: Entregable 3 - Documentación Global del Framework y Landing Page Web (`README.md`, `QUICKSTART.md`, `CHANGELOG.md`, `docs/index.html`) [COMPLETADO - Esperando Verificación del Usuario]
+- **Valor Aportado**: Se actualizó exhaustivamente la documentación pública, guías prácticas, el CHANGELOG para v0.7.0 y la landing page interactiva con la nueva arquitectura de Vertical Slices E2E, Walking Skeleton, visibilidad dinámica con `[/]`, verificación en 6 niveles y la pausa de validación humana en vivo.
+- **Siguientes Entregables**: Ninguno. Todos los entregables del plan v0.7.0 han sido completados y verificados.
 
 ---
 
@@ -51,6 +51,20 @@
   - Incrementar versiones a 0.7.0.
 - [x] **Tarea 2.5**: Verificación del Entregable 2
   - Validar ciclo completo de skills E2E y coherencia de metadatos.
+
+---
+
+## Tareas del Entregable 3: Documentación Global y Landing Page Web [COMPLETADO]
+
+- [x] **Tarea 3.1**: Actualizar `CHANGELOG.md` para v0.7.0.
+  - Documentar cambios en vertical slices, walking skeleton, estados `[/]`, verificación en 6 niveles y pausa de validación humana.
+- [x] **Tarea 3.2**: Actualizar `README.md` y `QUICKSTART.md`.
+  - Reflejar la filosofía de rebanadas verticales E2E utilizables desde la Spec 001.
+  - Ajustar tabla de skills y comandos de inicio rápido.
+  - Explicar la guía interactiva y la pausa de validación en vivo.
+- [x] **Tarea 3.3**: Actualizar landing page en `docs/index.html`.
+  - Sincronizar secciones, badges de versión v0.7.0 y explicaciones sobre Vertical Slices y Live Verification.
+- [x] **Tarea 3.4**: Verificación completa del Entregable 3.
 
 ### Entregable 3: Documentación Global y Landing Page Web
 - [ ] Tarea 3.1: Actualizar `CHANGELOG.md` para v0.7.0.

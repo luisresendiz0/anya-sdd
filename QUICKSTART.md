@@ -1,6 +1,6 @@
 # Quick Start Guide
 
-End-to-end workflow using Anya-SDD v0.6.0.
+End-to-end workflow using Anya-SDD v0.7.0.
 
 ## Setup
 
@@ -33,9 +33,9 @@ No real-time collaboration or payments.
 **Output:** `anya/constitution.md`
 
 The agent will:
-- Extract info from the prompt
+- Extract user capabilities from the prompt
 - Ask only what's missing
-- Flag doubts and contradictions
+- Ensure no horizontal technical tasks are placed in features
 - Request approval before writing
 
 ### 2. Stack
@@ -49,25 +49,26 @@ React + Tailwind frontend. Unit + E2E tests.
 
 The agent will:
 - Ask the project type if it isn't clear
-- Ask missing items (ORM, deployment, testing…)
+- Record the **exact execution commands** to build and run the app locally
 - Derive test tools from **your** ecosystem — never assume one
 - Record the **exact command** to run each test suite
 - Validate against the constitution
 
-**Example testing block:**
+**Example block:**
 
 ```markdown
+## Execution Commands
+- **Build / Compile:** `npm run build`
+- **Run / Dev:** `npm run dev`
+
 ## Testing Strategy
 - **Unit tests:** yes
-  - Tool: <tool for your ecosystem>
-  - Command: `<exact command>`
+  - Tool: Vitest
+  - Command: `npm run test:unit`
 - **E2E tests:** yes
-  - Tool: <tool for your ecosystem>
-  - Command: `<exact command>`
+  - Tool: Playwright
+  - Command: `npm run test:e2e`
 ```
-
-If the project has no tests, say so. Downstream skills will skip that check
-instead of inventing one.
 
 ### 3. Plan
 
@@ -78,36 +79,28 @@ instead of inventing one.
 **Output:** `anya/plan.md`
 
 The agent will:
-- Read the constitution and stack
-- Propose phases with specs
-- Ensure a logical order (dependencies first)
+- Read constitution and stack
+- Establish **Spec 001 as a functional Walking Skeleton** (simplest end-to-end flow + minimal runnable setup)
+- Structure remaining deliverables as **End-to-End Vertical Slices** (no horizontal layers)
 - Request approval
 
 **Example output:**
 
 ```markdown
-### Phase 1: Foundations
-1. auth-basic - JWT setup
-2. login - User login
+### Phase 1: Walking Skeleton & Core Flow
+1. task-create-view - Setup app + UI/CLI and persistence to create & view tasks
+2. task-toggle-status - Interactively toggle completion status with instant UI feedback
 
-### Phase 2: Core
-3. dashboard - Main view
-4. client-crud - Client management
-5. project-crud - Project management
-6. task-crud - Task management
-7. timer - Time tracking
-
-### Phase 3: Value
-8. reports - Monthly reports
-9. invoicing - PDF invoicing
+### Phase 2: Search & Delivery
+3. task-search-filter - Interactive search bar and status filtering
+4. task-export-csv - CSV export button and download generation
 ```
 
 ## Phase 2: Iteration
 
 Repeat for **every spec**.
 
-Detail the next usable increment when ready to build it; leave later work as
-backlog entries. After trying each delivery, adjust the next step from feedback.
+Every increment cuts vertically through UI/CLI, logic, and state. The app stays 100% functional and runnable at every step.
 
 ### 4. Generate a spec
 
@@ -118,83 +111,93 @@ backlog entries. After trying each delivery, adjust the next step from feedback.
 **Output:** `anya/specs/NNN-name/spec.md`
 
 The agent will:
-- Identify the next pending spec
-- Decide Mini-Spec (3 sections) or Full-Spec (9 sections)
-- Generate it and request approval
-
-Folders are numbered in creation order: `001-auth`, `002-login`, etc. Existing
-specs keep their folder when updated. Names in commands can be unique spec names
-(`login`) or numbered folders (`002-login`).
+- Pick the next pending vertical slice from `anya/plan.md`
+- Choose between **Complete Vertical Slice Spec** (6 sections) or **Flexible Lightweight Spec** (for quick fixes/tweaks)
+- Include concrete **Live Verification Steps**
+- Generate spec and request approval
 
 ### 5. Generate tasks
 
 ```bash
-/anya-task <spec-name>
+/anya-task 001-task-create-view
 ```
 
 **Output:** `anya/specs/NNN-name/tasks.md`, beside its `spec.md`.
-Required for every spec, including Mini-Specs; use only the tasks the work needs.
 
 Each task gets:
-- A clear action
-- The file(s) to create or modify
-- Explicit dependencies
+- A clear action with explicit dependencies and target files
+- Support for live progress states (`[ ]` pending, `[/]` in progress, `[x]` completed)
+- A **mandatory final task** dedicated to live compilation, startup, and interactive verification
 
 **Example:**
 
 ```markdown
-- [ ] **Task 1:** Create User model
-  - File: `src/models/user.ts`
+- [ ] **Task 1:** Create SQLite database schema and task repository
+  - File: `src/db/tasks.ts`
   - Dependencies: None
 
-- [ ] **Task 2:** Implement password hashing
-  - File: `src/utils/password.ts`
+- [ ] **Task 2:** Implement task list and form UI components
+  - File: `src/components/TaskView.tsx`
   - Dependencies: Task 1
 
-- [ ] **Task 3:** Create login endpoint
-  - File: `src/routes/auth.ts`
-  - Dependencies: Tasks 1, 2
+- [ ] **Task 3 (Final):** Compilación, arranque y prueba interactiva en vivo
+  - File: `src/main.tsx`
+  - Description: Verify compilation, launch dev server, and execute live verification steps.
+  - Dependencies: Task 1, Task 2
 ```
 
 ### 6. Implement
 
 ```bash
-/anya-implement <spec-name>
+/anya-implement 001-task-create-view
 ```
 
 The agent will:
 - Execute tasks **one at a time**
-- Mark each task `[x]` immediately and show partial progress (`3/8`)
-- Validate against spec, stack, and constitution
-- Run the test commands declared in `stack.md` (if any)
-- Run `/anya-verify` automatically
-- Show progress and suggest future specs
+- Mark each task `[/]` when starting and `[x]` immediately when completed
+- Verify clean compilation and runtime health using the run command from `stack.md`
+- Run `/anya-verify` automatically across 6 levels
+- Present the **Interactive Live Testing Guide**
+- **HALT COMPLETELY** with a mandatory pause for you to try the app live
 
-**Example verification output:**
+**Example output:**
 
 ```
-Spec completed: 002-login/spec.md
+✓ Implementación completada: 001-task-create-view/spec.md
 
-Verification
-  Level 1  Tasks          8/8
-  Level 2  Spec           5/5 requirements met
-  Level 3  Stack          consistent
-  Level 4  Constitution   consistent
-  Level 5  Tests          6/6 pass
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Verificación de Entregable (6 Niveles)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Nivel 1: Tareas           ✓ 3/3 en tasks.md
+Nivel 2: Spec (Slice)     ✓ Rebanada vertical completa y funcional
+Nivel 3: Stack            ✓ Tecnologías conformes
+Nivel 4: Constitución     ✓ Reglas y exclusiones respetadas
+Nivel 5: Runtime          ✓ Compila y arranca con `npm run dev`
+Nivel 6: Tests            ✓ 4/4 pasaron
 
-Risks: 1    Improvements: 2
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Guía de Prueba Interactiva en Vivo
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Levanta la aplicación:
+   $ npm run dev
 
-Suggested Specs
-1. Rate limiting      → /anya-spec global rate limiting for auth endpoints...
-2. Login logging      → /anya-spec logging all login attempts...
+2. Abre en tu navegador:
+   http://localhost:3000
 
-Progress
-  001-auth/       done
-  002-login/      just finished
-  003-register/   next
+3. Realiza la prueba:
+   - Paso 1: Ingresa "Comprar café" en el campo de texto y haz clic en "Agregar".
+   - Paso 2: Confirma que la tarea aparezca en la lista con estado pendiente.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Pausa de Verificación Humana
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Por favor prueba la aplicación en vivo con los pasos anteriores.
+¿La funcionalidad responde como esperabas?
+
+a) Sí, verificada en vivo -> Continuar con la siguiente spec (/anya-spec next)
+b) No, se detectaron fallos -> Ajustar entregable actual
+c) Revisar detalles técnicos
 ```
-
-If `stack.md` declares no testing, Level 5 is reported as `N/A`.
 
 ### 7. Repeat
 
@@ -204,147 +207,48 @@ If `stack.md` declares no testing, Level 5 is reported as `N/A`.
 /anya-implement <spec>
 ```
 
-Until the plan is complete.
+Until all vertical slices are shipped.
 
 ## Common Scenarios
 
 ### Generate a specific spec
-
 ```bash
-/anya-spec login
+/anya-spec task-search-filter
 ```
 
-### Generate several specs
-
+### Quick bug fix or small evolutive
 ```bash
-/anya-spec next 3
+/anya-spec fix button alignment on mobile view
 ```
-
-### Add a spec that isn't in the plan
-
-```bash
-/anya-spec rate limiting for login, max 5 attempts in 15 min
-```
-
-The agent asks what's missing to define it (scope, criteria, exclusions), generates
-the spec, and proposes updating the plan.
-
-### Update an existing spec
-
-```bash
-/anya-spec update login to include Google OAuth
-```
+Uses the **Flexible Lightweight Spec** (4 sections) for quick resolution.
 
 ### Review a broken implementation
-
 ```bash
-/anya-implement review login
+/anya-implement review 001-task-create-view
 ```
-
-The agent diagnoses in cascade:
-
-1. Are all tasks completed?
-2. Does the implementation meet the spec?
-3. Is it consistent with the stack?
-4. Does it respect the constitution?
-
-Then it proposes a surgical fix — not a rewrite.
+Diagnoses in cascade (tasks → spec criteria → stack → constitution) and proposes a surgical fix.
 
 ### Re-verify a spec
-
 ```bash
-/anya-verify login
+/anya-verify 001-task-create-view
 ```
-
-### Add context to tasks
-
-```bash
-/anya-task login focus on security first
-```
-
-### Skip tests temporarily
-
-```bash
-/anya-implement login skip tests for now
-```
-
-## Change Management
-
-### Add a spec mid-project
-
-```bash
-/anya-spec <description>
-```
-
-The agent defines it with you and proposes a plan update.
-
-### Change the constitution
-
-1. Update `anya/constitution.md` manually
-2. Re-run `/anya-plan` to re-evaluate
-3. Re-generate affected specs
-
-### Change the stack
-
-1. Update `anya/stack.md` manually
-2. Re-generate affected specs
-
-Every artifact carries `> version: N · updated: YYYY-MM-DD`. Bump the version when
-you regenerate or expand it.
-
-## Tips
-
-**Be specific in prompts:**
-
-```bash
-# Vague
-/anya-constitution task app
-
-# Specific
-/anya-constitution Task manager for freelancers with multiple clients.
-Need projects by client, time tracking, monthly reports, PDF invoicing.
-No real-time collaboration or payments.
-```
-
-**Use context when needed:**
-
-```bash
-/anya-task login prioritize security over speed
-```
-
-**Trust the pipeline:**
-- Each skill validates against the previous outputs
-- Gates catch contradictions early
-- Anti-patterns are listed in each skill's frontmatter
-
-**Don't skip the foundation:**
-- Constitution → Stack → Plan, in order
-- Skipping causes rework later
 
 ## Output Files
 
 ```
 anya/
-├── constitution.md    # Vision, rules, scope
-├── stack.md           # Technologies + testing + commands
-├── plan.md            # Specs in phases
+├── constitution.md    # Vision, user capabilities, rules
+├── stack.md           # Technologies, run/dev commands, testing strategy
+├── plan.md            # Vertical slices with user value
 └── specs/
-    ├── 001-auth/
+    ├── 001-task-create-view/
     │   ├── spec.md
     │   └── tasks.md
-    ├── 002-login/
+    ├── 002-task-toggle-status/
     │   ├── spec.md
     │   └── tasks.md
     └── ...
 ```
-
-All files are git-trackable and human-readable.
-
-For existing flat specs, move each `<name>.md` / `<name>.tasks.md` pair into a
-numbered folder as `spec.md` / `tasks.md`. Use the current plan order for the
-initial migration; preserve existing numbered folders, append unused numbers,
-and update affected links and references. Keep content and task checkboxes;
-resolve conflicts before moving files and never overwrite a destination.
 
 ## Next Steps
 
