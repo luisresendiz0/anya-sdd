@@ -4,6 +4,11 @@
 
 ### 🍰 Agile Vertical Slices, Interactive Testing & Live Verification
 
+### Added
+
+- **Anya High-Resolution Chibi Sprites:** Organic integration of character illustrations (`Peeking`, `Quality Inspector`, and `Waku-Waku`) across the landing page with transparent alphas and dual WebP/PNG responsive sources.
+- **Permanent Sticky Floating Navigation Island:** Restructured viewport overflow containment using `overflow-x: clip` to allow permanent sticky positioning (`top: 0`), dynamic frosted glass capsule animation on scroll, and polished padding (`36px` desktop / `18px` mobile).
+
 ### Changed
 
 - **Agile Vertical Slices (End-to-End):** Every spec is an end-to-end usable increment (Interface/UI/CLI + Logic + State/Data + Tests). Strictly prohibits horizontal cascade development (no isolated DB or backend-only specs).

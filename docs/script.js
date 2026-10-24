@@ -9,13 +9,21 @@
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
   /* ----------------------------------------------------------
-     Header: shadow on scroll
+     Header: animated sticky on scroll
      ---------------------------------------------------------- */
   const header = $("#site-header");
-  const onScroll = () => {
-    header.classList.toggle("is-scrolled", window.scrollY > 8);
+  let ticking = false;
+  const updateHeader = () => {
+    header.classList.toggle("is-scrolled", window.scrollY > 16);
+    ticking = false;
   };
-  onScroll();
+  const onScroll = () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateHeader);
+      ticking = true;
+    }
+  };
+  updateHeader();
   window.addEventListener("scroll", onScroll, { passive: true });
 
   /* ----------------------------------------------------------
@@ -325,23 +333,28 @@
     return true;
   };
 
-  $$("[data-copy]").forEach((btn) => {
+  $$("[data-copy], [data-copy-text]").forEach((btn) => {
     btn.addEventListener("click", async () => {
-      const source = $(btn.dataset.copy);
-      if (!source) return;
-      const text = source.textContent.replace(/^\n+|\n+$/g, "");
+      let text = btn.dataset.copyText;
+      if (!text && btn.dataset.copy) {
+        const source = $(btn.dataset.copy);
+        if (source) text = source.textContent.replace(/^\n+|\n+$/g, "");
+      }
+      if (!text) return;
+
       try {
         await copyText(text);
-        const original = btn.textContent;
-        btn.textContent = "Copied!";
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `<span class="copy-check">✓</span><span>Copied!</span>`;
         btn.classList.add("is-copied");
         setTimeout(() => {
-          btn.textContent = original;
+          btn.innerHTML = originalHTML;
           btn.classList.remove("is-copied");
         }, 1600);
       } catch (err) {
-        btn.textContent = "Copy failed";
-        setTimeout(() => { btn.textContent = "Copy"; }, 1600);
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `<span>Failed</span>`;
+        setTimeout(() => { btn.innerHTML = originalHTML; }, 1600);
       }
     });
   });
