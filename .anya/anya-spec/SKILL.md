@@ -2,10 +2,10 @@
 name: anya-spec
 role: Product-Minded Tech Lead
 description: >
-  Generates specific, self-contained specs. Decides Mini-Spec (3 sections) vs
-  Full-Spec (9 sections) based on complexity. Activates when plan exists and user
-  wants to generate next spec or specific spec.
-version: 0.6.0
+  Generates self-contained, end-to-end vertical slice specifications. Adapts between
+  Complete Vertical Slice Specs (for medium/large features) and Flexible Lightweight Specs
+  (for fixes, evolutives, and small changes). Enforces live verification steps and runnable deliverables.
+version: 0.7.0
 triggers:
   - user_intent: "generate next spec"
   - user_intent: "generate specific spec"
@@ -16,168 +16,139 @@ writes: [anya/specs/NNN-name/spec.md]
 next: anya-task
 gates:
   - "Coherent with constitution and stack"
-  - "Self-contained (understandable alone)"
-  - "3 essential sections present (Context, Criteria, NOT include)"
-  - "Conditional sections only if applicable"
-  - "Acceptance criteria clear and verifiable"
-  - "If anya/stack.md declares testing, includes required tests (Full-Spec)"
-  - "Spec type (Mini/Full) matches complexity"
+  - "Represents an End-to-End Vertical Slice (or targeted atomic fix/evolutive)"
+  - "Spec defines tangible User / Functional Value"
+  - "Specifies live interactive verification steps (how to test in real time)"
+  - "Identifies E2E layers involved (Interface/UI/CLI, Logic, Data/State)"
+  - "Acceptance criteria clear and testable"
+  - "Explicit exclusions (What it does NOT include)"
+  - "If anya/stack.md declares testing, includes required test cases"
   - "Respects constitution NOT list"
-  - "New specs outside the plan are defined by asking, not assumed"
   - "Version header present in anya/specs/NNN-name/spec.md"
 exit:
   - "Spec generated at anya/specs/NNN-name/spec.md"
   - "All required sections complete"
   - "User approves spec"
 anti:
-  - "Full-Spec for simple tasks"
-  - "Mini-Spec for complex features"
-  - "Vague acceptance criteria ('must work well')"
+  - "Horizontal specs (e.g., 'database only', 'backend only', 'unintegrated UI')"
+  - "Specs without live verification instructions"
+  - "Specs that leave the application in an unrunnable state"
+  - "Over-engineered full specs for a small fix or minor evolutive change"
+  - "Vague acceptance criteria ('must work reliably')"
   - "Missing NOT include section"
   - "Violating constitution NOT list"
-  - "Depends on unimplemented specs"
-  - "Generating a new spec without asking what is missing"
 ---
 
 # Anya Spec
 
 ## Purpose
-Implementation source of truth.
+Define the precise functional contract and acceptance criteria for an End-to-End Vertical Slice or targeted evolutionary increment.
 
 ## Modes
 
-**Next spec:** `/anya-spec next`
-- Identify next pending spec from plan
-- Generate it
+**Next spec from plan:** `/anya-spec next`
+- Pick next pending vertical slice from plan.
+- Generate specification adhering to vertical slice standards.
 
-**Multiple specs:** `/anya-spec next 3`
-- Generate next 3 pending specs only when explicitly requested
+**Specific spec:** `/anya-spec <name>`
+- Generate spec by name (must exist in plan).
 
-**Specific spec:** `/anya-spec login`
-- Generate spec by name (must be in plan)
+**New spec / Evolutionary change:** `/anya-spec <description>`
+- Clarify missing scope, criteria, or exclusions only if needed.
+- Generate spec, then propose updating the plan.
 
-**New spec:** `/anya-spec rate limiting for login, max 5 attempts in 15 min`
-- Ask only what is missing to define it (scope, criteria, exclusions)
-- Generate spec, then suggest updating the plan
-
-**Update spec:** `/anya-spec update login to include Google OAuth`
-- Re-generate in the same folder, preserving unchanged parts
-- Show diff summary
+**Fix or Minor Evolutive:** `/anya-spec fix <description>` or `/anya-spec update <name>`
+- Select the flexible lightweight spec format to resolve the issue with minimal ceremony.
+- Preserve unchanged parts; bump version header.
 
 ## Storage
 
-Use `anya/specs/NNN-name/spec.md`; tasks share its folder. Reuse matching folders.
-New folders take the highest existing prefix + 1, padded to at least three digits
-(start `001`). Never renumber. Resolve by unique name or folder; ask if ambiguous.
+Specs live in `anya/specs/NNN-name/spec.md` with tasks in `tasks.md` beside them.
+New folders use the highest existing prefix + 1 (padded to at least 3 digits: `001`, `002`, ...). Never renumber existing folders.
 
-## Spec Type Decision
+## Spec Types: Proportional Design
 
-Default to Mini-Spec for the next usable increment; expand only for complexity:
+Adapt the spec size based on the nature of the deliverable:
 
-| Factor | Mini-Spec | Full-Spec |
-|--------|-----------|-----------|
-| Complexity | Simple (1-2 changes) | Complex (multiple changes, architecture) |
-| Impact | Local (no other parts) | Global (multiple components) |
-| Description | "Fix bug in..." | "Implement feature for..." |
+| Type | When to Use | Structure |
+|------|-------------|-----------|
+| **Complete Vertical Slice Spec** | New features, medium/large projects, Walking Skeleton | Full E2E layers, interface contract, data changes, live test steps |
+| **Flexible Lightweight Spec** | Fixes, minor evolutives, quick tweaks, local refinements | Context, targeted change, live verification, exclusions |
 
-Both structures below are guides — format freely, not templates to copy verbatim.
+Both templates below are guides — format freely to fit project needs without losing critical gates.
 
-## Mini-Spec Structure (3 sections)
+---
 
-```markdown
-# <Spec name>
-> version: 1 · updated: <YYYY-MM-DD>
+### 1. Complete Vertical Slice Spec (Medium/Large Projects)
 
-## Context
-<Why this exists, what problem it solves>
-
-## Acceptance Criteria
-- [ ] <Exact condition 1>
-- [ ] <Exact condition 2>
-- [ ] <Exact condition 3>
-
-## What It Does NOT Include
-- <Explicit exclusion 1>
-- <Explicit exclusion 2>
-```
-
-**Use for:** Simple tasks, bug fixes, micro-features, basic UI components
-
-## Full-Spec Structure (9 sections)
+Use for new functional slices and feature increments that span the stack.
 
 ````markdown
-# <Spec name>
+# Spec NNN: <Spec Name>
 > version: 1 · updated: <YYYY-MM-DD>
 
-## Context
-<Why this exists, what problem it solves>
+## 1. Context & User Value
+<Why this exists, the specific user problem it solves, and what the user can do once implemented.>
 
-## Functional Requirements
-- <What it must do 1>
-- <What it must do 2>
+## 2. End-to-End Scope (Vertical Layers)
+- **Interface / UI / CLI:** <What interactive elements or commands are added/modified>
+- **Logic & Rules:** <Business logic, validations, state transitions>
+- **Persistence & State:** <Data model additions, schema delta, in-memory or DB changes>
 
-## Non-Functional Requirements
-- <Performance/security/behavior 1>
-- <Performance/security/behavior 2>
+## 3. Acceptance Criteria
+- [ ] <Condition 1: Given X, When Y, Then Z>
+- [ ] <Condition 2: Valid input behavior>
+- [ ] <Condition 3: Error handling behavior>
 
-## API / Interface
-```
-<Endpoint or component definition>
-```
+## 4. Live Verification Steps
+<Exact interactive steps the user or agent will perform to verify the running application:>
+1. Start the app: `<command from stack.md>`
+2. Navigate or invoke: `<URL or CLI invocation>`
+3. Perform action: `<click / enter input>`
+4. Expected visual/terminal result: `<what should appear>`
 
-## Data Model
-<Interface or schema in the project's language, if applicable>
+## 5. Required Tests
+<Only if anya/stack.md declares testing. Uses commands defined in stack.md.>
+- Unit tests: `<critical test cases>`
+- Integration / E2E: `<flow verification>`
 
-## Required Tests
-<Only if anya/stack.md declares testing. Use the commands recorded there.>
-```
-Unit tests:
-- <test case 1>
-
-E2E tests:
-- <test case 2>
-```
-
-## Acceptance Criteria
-- [ ] <Condition 1>
-- [ ] <Condition 2>
-
-## Dependencies
-- <Other spec or component 1>
-- <Other spec or component 2>
-
-## What It Does NOT Include
-- <Exclusion 1>
-- <Exclusion 2>
+## 6. What It Does NOT Include
+- <Explicit exclusion 1: e.g. pagination deferred to spec 004>
+- <Explicit exclusion 2: e.g. advanced styling>
 ````
 
-**Use for:** Complex features, architecture changes, external integrations, large refactorings
+---
 
-## Process
+### 2. Flexible Lightweight Spec (Fixes & Minor Evolutives)
 
-### For Plan Specs (Modes 1-3)
-1. **Read** plan
-2. **Identify** pending specs
-3. **Confirm** only unresolved scope; reuse existing authorization
-4. **Generate** spec
+Use for targeted bug fixes, evolutionary refinements, or minor enhancements.
 
-### For New Spec (Mode 4)
-1. **Ask** what is needed to define it: scope, acceptance criteria, exclusions — only what the prompt doesn't answer
-2. **Generate** spec
-3. **Suggest**: "Not in plan. Update plan? (yes/no)"
-4. **Update** plan if accepted
+```markdown
+# Spec NNN: <Fix or Tweak Name>
+> version: 1 · updated: <YYYY-MM-DD>
 
-### For Update Spec (Mode 5)
-1. **Read** existing spec
-2. **Identify** changes
-3. **Re-generate** preserving unchanged parts; bump version header
-4. **Show** diff summary
+## 1. Context & Objective
+<Problem statement, root cause or enhancement motivation.>
 
-## Constitution Validation
+## 2. Targeted Changes & Expected Behavior
+- <Exact change required in UI, logic, or state>
+- <Expected behavior after fix>
 
-Before generating, check against constitution:
+## 3. Acceptance Criteria & Live Verification
+- [ ] <Fix verification condition 1>
+- [ ] <Fix verification condition 2>
+**How to verify live:**
+- Run: `<command>`
+- Action: `<reproduce scenario and confirm fix>`
+
+## 4. What It Does NOT Include
+- <Out-of-scope aspects or related refactors not included in this patch>
 ```
-Constitution: "No Slack integration"
-Proposed: "Slack integration for notifications"
-→ Flag conflict; reconcile an explicit scope change before implementation
-```
+
+---
+
+## Constitution & Slicing Validation
+
+Before generating, verify:
+1. **Vertical slice integrity:** Does this slice touch whatever layers are necessary to be immediately interactive and testable? If it only touches a database or an uncalled internal service, reject and convert to a vertical slice.
+2. **Constitution compliance:** Does it violate any rule or item in the constitution's "What We Will NOT Do" list? Flag any contradiction immediately.
