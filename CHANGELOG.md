@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.7.0] - 2026-10-23
+
+### 🍰 Agile Vertical Slices, Interactive Testing & Live Verification
+
+### Changed
+
+- **Agile Vertical Slices (End-to-End):** Every spec is an end-to-end usable increment (Interface/UI/CLI + Logic + State/Data + Tests). Strictly prohibits horizontal cascade development (no isolated DB or backend-only specs).
+- **Walking Skeleton as Spec 001:** The initial deliverable implements the most elemental user flow, absorbing minimal setup so the application is 100% functional, runnable, and testable from the very first spec.
+- **Proportional Spec Sizing (`anya-spec`):** Complete Vertical Slice Spec for medium/large features, and Flexible Lightweight Spec for bug fixes, evolutives, and small tweaks.
+- **Dynamic Task Tracking (`anya-task` & `anya-implement`):** Real-time task status tracking supporting `[ ]` (pending), `[/]` (in progress), and `[x]` (completed). Every task list concludes with a mandatory final task for compilation, startup, and live interactive verification.
+- **6-Level Verification & Runtime Health (`anya-verify`):** Explicit validation of application build and runtime health using exact execution commands from `anya/stack.md`.
+- **Interactive Live Testing Guide & Mandatory Pause:** Generates concrete user walkthroughs (run command, URLs/CLI input, expected results) and strictly pauses execution until human live verification is approved.
+- **Execution Commands in Stack (`anya-stack`):** Captures build and run/dev commands alongside testing strategies.
+
 ## [0.6.0] - 2026-10-22
 
 ### Numbered Specs & Incremental Delivery

@@ -2,10 +2,10 @@
 name: anya-stack
 role: Pragmatic Systems Architect
 description: >
-  Defines technical stack and testing strategy. NO assumptions about architecture
-  or ecosystem. Generates anya/stack.md. Activates when constitution exists and
-  user wants to define technologies.
-version: 0.6.0
+  Defines technical stack, execution commands, and testing strategy. Records the exact
+  commands to build, run, and test the application so downstream skills can execute and verify live.
+  Generates anya/stack.md.
+version: 0.7.0
 triggers:
   - user_intent: "define stack"
   - user_intent: "choose technologies"
@@ -15,8 +15,9 @@ writes: [anya/stack.md]
 next: anya-plan
 gates:
   - "Stack coherent with constitution"
-  - "No tech contradictions (React + Angular)"
+  - "No tech contradictions (e.g. React + Angular)"
   - "Versions specified when relevant"
+  - "Execution commands recorded: build/compile command and exact run/dev command to start the app live"
   - "Testing strategy clear: unit/e2e yes/no, tool and exact command recorded"
   - "No architecture assumptions"
   - "Respects constitution NOT list"
@@ -26,6 +27,7 @@ exit:
   - "File created at anya/stack.md"
 anti:
   - "Assuming full-stack without asking"
+  - "Missing exact execution/startup command (run/dev)"
   - "Contradictory technologies"
   - "Missing versions when relevant"
   - "Testing strategy without tool or exact command"
@@ -36,7 +38,7 @@ anti:
 # Anya Stack
 
 ## Purpose
-Define technologies, frameworks, tools, testing strategy. Critical decision affecting all future specs.
+Define technologies, runtime commands, tools, and testing strategy. Crucial contract enabling downstream skills to compile, run, and verify the application live.
 
 ## Critical Rule
 **DO NOT assume architecture.** Project can be:
@@ -47,9 +49,7 @@ Define technologies, frameworks, tools, testing strategy. Critical decision affe
 - CLI
 - Other
 
-**DO NOT assume an ecosystem.** The stack may be TypeScript, Java, Python, Go,
-Rust, C#, or anything else. Derive every recommendation from the ecosystem the
-user chose — never default to one language.
+**DO NOT assume an ecosystem.** The stack may be TypeScript, Java, Python, Go, Rust, C#, or anything else. Derive every recommendation from the ecosystem the user chose — never default to one language.
 
 Read constitution for context, but ask if unspecified.
 
@@ -79,6 +79,10 @@ Format freely — this is a guide, not a template to copy verbatim.
 ## Technologies
 <Organized by category based on type — e.g. Backend/Frontend for full-stack>
 
+## Execution Commands
+- **Build / Compile:** `<exact build command, or N/A if interpreted>`
+- **Run / Dev:** `<exact command to launch the app locally for interactive live testing>`
+
 ## Tools
 - **Deployment:** <platform>
 - **Package / build tool:** <tool for the chosen ecosystem>
@@ -92,25 +96,24 @@ Format freely — this is a guide, not a template to copy verbatim.
   - Tool: <tool matching the chosen ecosystem>
   - Command: `<exact command to run>`
 
-**Note:** Testing applies to entire project once defined. Downstream skills run
-these exact commands and never assume a framework.
+**Note:** Downstream skills (`anya-implement`, `anya-verify`) execute these exact commands to run the application live and execute tests.
 ```
 
-## Testing Rules
+## Testing & Execution Rules
 
+- Always record the exact command to run/start the app (`Run / Dev`) — needed for interactive live verification.
 - Recommend unit tests by default — cheap and fast.
 - Recommend E2E tests only if the project has a user-facing surface (UI or API flows).
-- Never name a concrete test framework here. Derive the tool from the ecosystem already chosen (language, build tool, package manager) or ask.
-- If the user is unsure, propose 1–2 options that belong to that ecosystem.
+- Never name a concrete test framework here. Derive the tool from the ecosystem already chosen or ask.
 - Always record the exact command to run — downstream skills execute it verbatim.
 - If the project declares no testing, downstream skills skip test validation.
 
 ## Process
 
-1. **Read** constitution for context
-2. **Ask** project type (if not in prompt)
-3. **Extract** technologies from prompt (if provided)
-4. **Ask** missing items only
-5. **Recommend** if user unsure (within the chosen ecosystem, based on constitution + best practices)
-6. **Generate** `anya/stack.md`
-7. **Confirm** with user
+1. **Read** constitution for context.
+2. **Ask** project type (if not in prompt).
+3. **Extract** technologies from prompt (if provided).
+4. **Identify** exact build, run/dev, and test commands.
+5. **Recommend** if user unsure (within the chosen ecosystem).
+6. **Generate** `anya/stack.md`.
+7. **Confirm** with user.

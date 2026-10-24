@@ -2,11 +2,10 @@
 name: anya-verify
 role: Quality Assurance Architect
 description: >
-  Validates implementation across 5 levels (tasks, spec, stack, constitution,
-  tests when declared in anya/stack.md). Detects risks, suggests improvements,
-  proposes future specs with detailed prompts. Runs automatically after
-  anya-implement or manually to re-verify.
-version: 0.6.0
+  Validates vertical slice deliverables across 6 levels including build/runtime health.
+  Generates a step-by-step Interactive Live Testing Guide for the user and enforces
+  a mandatory stop for human live verification before allowing progress.
+version: 0.7.0
 triggers:
   - user_intent: "verify implementation"
   - user_intent: "check quality"
@@ -19,150 +18,131 @@ reads:
   - anya/specs/NNN-name/spec.md
   - anya/specs/NNN-name/tasks.md
 writes: []
-next: anya-spec (if continuing)
+next: anya-spec (only after user live approval)
 gates:
-  - "All applicable verification levels evaluated"
+  - "All applicable verification levels evaluated (including build and runtime health)"
   - "Each level and item reported as it is checked"
+  - "Build and runtime command executed from anya/stack.md without error"
   - "Test commands come from anya/stack.md, never assumed"
-  - "Detected risks are real and specific"
-  - "Suggested improvements are relevant"
-  - "Suggested spec prompts are detailed and actionable"
-  - "Result clear and actionable"
-  - "Risks prioritized by severity (critical, important, minor)"
+  - "Interactive Live Testing Guide generated with exact user actions"
+  - "Mandatory Pause enforced: halts completely for user live validation"
+  - "Risks and improvements clearly identified"
 exit:
-  - "Verification completed in all applicable levels"
-  - "Result shown to user"
-  - "Suggested specs with detailed prompts (if applicable)"
-  - "User decides to accept or adjust"
+  - "Verification completed across all applicable levels"
+  - "Interactive Live Testing Guide presented to user"
+  - "System halts awaiting human verification response"
 anti:
-  - "Vague suggested spec prompts ('/anya-spec rate limiting')"
-  - "Blocking progress for minor risks"
-  - "Not prioritizing risks by severity"
-  - "Confusing or non-actionable output"
-  - "Detecting non-real risks"
-  - "Suggesting irrelevant improvements"
+  - "Automatically continuing to next spec without user live verification pause"
+  - "Missing step-by-step interactive testing guide"
+  - "Assuming the app works without running build/startup commands"
   - "Assuming test frameworks not declared in anya/stack.md"
+  - "Vague test suggestions"
+  - "Blocking progress on non-critical minor risks"
 ---
 
 # Anya Verify
 
 ## Purpose
-Validate implementation; report risks and actionable next specs.
+Validate vertical slice delivery across 6 levels, confirm build/runtime execution, provide the user with an exact step-by-step **Interactive Live Testing Guide**, and enforce a mandatory verification pause.
 
-**Note:** Runs automatically after `/anya-implement`, or manually.
+**Note:** Runs automatically at the end of `/anya-implement`, or manually via `/anya-verify <spec-name>`.
 
-Resolve the spec by unique name or numbered folder; ask if ambiguous.
-
-## Modes
-
-**Automatic:** Runs at end of `/anya-implement <spec-name>`
-
-**Manual:** `/anya-verify <spec-name>`
-- Re-verify already implemented spec
-
-## Process
-
-1. **Read** spec, tasks, stack, constitution
-2. **Validate** in 5 levels, reporting each level and each item as it is checked — pass/fail per item, never a single aggregated summary at the end
-3. **Detect** risks and improvements
-4. **Suggest** specs with detailed prompts
-5. **Ask** user if they accept implementation
+Resolve the spec by unique name or numbered folder (`001-name`); ask if ambiguous.
 
 ## Verification Levels
 
-| Level | Validate | How |
-|-------|----------|-----|
-| 1 | Tasks completed | All tasks in `tasks.md` marked |
-| 2 | Spec fulfilled | Cross-reference requirements + criteria with implementation |
-| 3 | Stack consistency | Uses technologies from `anya/stack.md` |
-| 4 | Constitution consistency | Respects business rules + NOT list |
-| 5 | Tests (only if `anya/stack.md` declares testing) | Run the exact commands recorded in `anya/stack.md` → Testing Strategy. If stack declares no testing: mark N/A; never create or assume tests. |
+| Level | Validation | How |
+|-------|------------|-----|
+| **1. Tasks** | All tasks completed | Every task in `tasks.md` marked `[x]` |
+| **2. Spec** | Vertical slice criteria met | Cross-reference functional requirements and acceptance criteria |
+| **3. Stack** | Technology compliance | Uses technologies defined in `anya/stack.md` |
+| **4. Constitution** | Business rules & boundaries | Respects rules and exclusions from `anya/constitution.md` |
+| **5. Build & Runtime** | App compiles and starts | Executes build and run commands from `anya/stack.md` to confirm zero startup errors |
+| **6. Tests** | Automated test suite | Executes exact test command from `anya/stack.md`. If none declared: reported as N/A |
 
-## Risk Detection
+## Interactive Live Testing Guide
 
-Categories:
+Anya-Verify builds a concrete, interactive walkthrough derived from the spec's `Live Verification Steps`:
+1. **Execution command:** The exact terminal command to start the application/server.
+2. **Access point:** URL, localhost port, or CLI command.
+3. **Step-by-step user actions:** What to click, input, or trigger.
+4. **Expected observable behavior:** What should visually appear or be returned.
 
-| Category | Examples |
-|----------|----------|
-| **Security** | No input validation, no rate limiting, secrets in logs |
-| **Performance** | N+1 queries, no pagination |
-| **Maintainability** | Duplicated logic, long functions |
-| **UX** | No loading states, no error handling |
+## Process
 
-**Prioritize by severity:**
-1. **Critical:** Security, data loss, broken functionality
-2. **Important:** Performance, UX, maintainability
-3. **Minor:** Optimizations, extra features
+1. **Read** spec, tasks, stack, and constitution.
+2. **Validate** in 6 levels, reporting each level and item as it is evaluated.
+3. **Confirm** build and runtime health.
+4. **Identify** any risks or suggested evolutive specs.
+5. **Generate** the **Guía de Prueba Interactiva en Vivo**.
+6. **Halt Execution (Mandatory Pause):** Stop and ask the user to test live.
 
-## Spec Suggestions
-
-For each risk/improvement, suggest spec with **detailed, actionable** prompt:
-
-✅ Good:
-```
-/anya-spec global rate limiting for auth endpoints, max 100 req/min per IP, return 429 with Retry-After header
-```
-
-❌ Bad:
-```
-/anya-spec rate limiting
-```
-
-## Output Format
+## Output Structure
 
 Format freely — this is a guide, not a template to copy verbatim.
 
 ```
-✓ Implementation completed: NNN-name/spec.md
+✓ Implementación completada: NNN-name/spec.md
 
-━━━━━━━━━━━━━━━━━━━━━━
-Verification
-━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Verificación de Entregable (6 Niveles)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Level 1: Tasks
-✓ Tasks completed: X/Y
+Nivel 1: Tareas
+✓ Tareas completadas: X/X en tasks.md
 
-Level 2: Spec
-✓ Functional requirements: X/Y met
-✗ Missing: <description>
+Nivel 2: Spec (Rebanada Vertical)
+✓ Criterios de aceptación: X/X cumplidos
+✓ Flujo de usuario E2E verificado
 
-Level 3: Stack
-✓ Consistent: <technologies>
+Nivel 3: Stack
+✓ Tecnologías consistentes con anya/stack.md
 
-Level 4: Constitution
-✓ Consistent
+Nivel 4: Constitución
+✓ Reglas de negocio respetadas
+✓ Lista de exclusiones respetada
 
-Level 5: Tests
-✓ Unit: X/Y pass
-✓ E2E: X/Y pass
-(or: N/A — no testing declared in anya/stack.md)
+Nivel 5: Compilación y Arranque (Runtime)
+✓ Compilación: limpia sin errores
+✓ Arranque: aplicación inicia correctamente con `<run command>`
 
-⚠ Risks: X
-💡 Improvements: X
+Nivel 6: Pruebas Automatizadas
+✓ Tests: X/X aprobados (o N/A si stack.md no declara testing)
 
-━━━━━━━━━━━━━━━━━━━━━━
-Suggested Specs
-━━━━━━━━━━━━━━━━━━━━━━
+⚠ Riesgos detectados: X
+💡 Mejoras sugeridas: X
 
-To resolve risks:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Guía de Prueba Interactiva en Vivo
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. <Title>
-   → /anya-spec <detailed prompt>
+Para probar este entregable en vivo en tu máquina:
 
-To implement improvements:
+1. Levanta la aplicación:
+   $ <comando de arranque de stack.md>
 
-2. <Title>
-   → /anya-spec <detailed prompt>
+2. Abre / Ejecuta:
+   <URL ej. http://localhost:3000 o comando CLI>
 
-━━━━━━━━━━━━━━━━━━━━━━
-Accept implementation?
-━━━━━━━━━━━━━━━━━━━━━━
+3. Realiza la prueba:
+   - Paso 1: <acción concreta en interfaz o terminal>
+   - Paso 2: <dato de prueba a ingresar o botón a presionar>
 
-a) Yes, continue with next spec
-b) No, implement missing first
-c) Review details
+4. Resultado esperado:
+   - <comportamiento visible / feedback interactivo>
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Pausa de Verificación Humana
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Por favor prueba la aplicación en vivo con los pasos anteriores.
+¿La funcionalidad responde como esperabas?
+
+a) Sí, verificada en vivo -> Continuar con la siguiente spec (/anya-spec next)
+b) No, se detectaron fallos -> Ajustar entregable actual
+c) Revisar detalles técnicos o diagnósticos
 ```
 
-## Don't Block Progress
+## Mandatory Pause Enforcement
 
-If all detected risks are minor, say so and let the user choose: continue with the next spec, or resolve them now. Never block on minor risks.
+The agent must NEVER proceed to generate or implement the next spec without the user's explicit live verification and approval.

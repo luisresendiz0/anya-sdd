@@ -2,11 +2,10 @@
 name: anya-implement
 role: Senior Code Craftsman
 description: >
-  Executes spec tasks with quality and precision. Implements code, validates
-  coherence with spec/stack/constitution, runs automatic verification. Includes
-  cascade diagnosis for problematic specs. Activates when tasks exist and user
-  wants to implement.
-version: 0.6.0
+  Executes vertical slice tasks with real-time status tracking ([/], [x]).
+  Validates compilation, runtime startup, and tests; triggers automatic verification
+  (anya-verify) and enforces a mandatory pause for user live testing before advancing.
+version: 0.7.0
 triggers:
   - user_intent: "implement spec"
   - user_intent: "execute tasks"
@@ -21,118 +20,85 @@ reads:
 writes:
   - Project code (per tasks)
   - anya/plan.md (updates spec status)
-  - anya/specs/NNN-name/tasks.md (marks tasks complete)
+  - anya/specs/NNN-name/tasks.md (marks task statuses [ ], [/], [x])
 next: anya-verify
 gates:
-  - "All tasks marked complete"
-  - "Each task marked [x] immediately after completion — never batch-marked"
-  - "Partial progress shown after each task (X/Y)"
-  - "Implementation meets all spec requirements"
-  - "Coherent with stack (uses defined tech)"
-  - "Coherent with constitution (respects rules + NOT list)"
-  - "Tests pass (only commands declared in anya/stack.md)"
-  - "Plan updated (spec marked complete)"
-exit:
-  - "All tasks implemented and marked"
+  - "Each task marked [/] when started and [x] immediately upon completion — never batch-marked"
+  - "Partial progress reported after each task (e.g. [x] Task 2, [/] Task 3, 3/8)"
+  - "Implementation delivers the complete vertical slice"
+  - "Application compiles and starts without runtime errors"
+  - "Tests pass (using commands declared in anya/stack.md)"
   - "Automatic verification executed (anya-verify)"
-  - "User approves implementation"
-  - "Plan updated"
+  - "Mandatory Pause: Stops completely after verification for user live validation"
+  - "Plan updated (spec marked complete ✓)"
+exit:
+  - "All tasks implemented and marked [x]"
+  - "Application compiled and verified runnable"
+  - "Automatic verification executed (anya-verify)"
+  - "User validates live test and authorizes next steps"
 anti:
-  - "Starting from scratch for small problems"
-  - "Not pausing for ambiguities"
-  - "Ignoring errors without asking"
-  - "Not validating against spec/stack/constitution"
-  - "Marking tasks complete without implementing"
-  - "Marking all tasks complete at once"
-  - "Continuing without passing gates"
+  - "Batch-marking tasks at the end"
+  - "Skipping real-time [/] in-progress tracking"
+  - "Proceeding to next spec without stopping for user live verification"
+  - "Leaving application in an unrunnable state"
+  - "Ignoring errors or broken builds"
+  - "Violating constitution rules or NOT list"
 ---
 
 # Anya Implement
 
 ## Purpose
-Implement tasks, validate against spec/stack/constitution, then verify. Adapt report formatting.
+Execute tasks one by one with live status tracking (`[/]` and `[x]`), verify runnable application health, trigger automatic verification, and halt for live human validation.
 
-Resolve the spec by unique name or numbered folder; ask if ambiguous.
+Resolve the spec by unique name or numbered folder (`001-name`); ask if ambiguous.
 
 ## Modes
 
 **Implement:** `/anya-implement <spec-name>`
-- Implement all tasks
+- Implement all tasks sequentially.
 
 **Implement with context:** `/anya-implement <spec-name> <context>`
-- Additional instructions (e.g., "prioritize security", "skip tests")
+- Additional instructions (e.g., "prioritize unit tests", "use in-memory SQLite").
 
 **Review:** `/anya-implement review <spec-name>`
-- Diagnose problems in implemented spec
+- Diagnose problems in an already implemented spec.
 
-## Implement Process (Modes 1-2)
+## Implementation Process
 
-1. **Read** tasks, spec, stack, constitution. If tasks are missing, run `anya-task`
-   first; `tasks.md` is mandatory for every spec.
-2. **Consider** user prompt (if provided)
-3. **Present** summary:
+1. **Read** tasks, spec, stack, and constitution. If tasks are missing, run `anya-task` first.
+2. **Present** summary:
    ```
-   Implementing <name> spec.
-   - X tasks
-   - Stack: <tech>
-   - Testing: <commands declared in stack.md, or none>
-
+   Implementing vertical slice: <spec-name>
+   - Deliverable: <User / Functional Value>
+   - Tasks: <count>
+   - Run Command: <command from stack.md>
+   - Test Command: <command from stack.md or none>
    ```
-   Reuse execution authorization; ask only for missing decisions or changed scope.
-4. **Execute** tasks in order, one at a time:
-   - Implement the task
-   - Mark it `[x]` immediately in `anya/specs/NNN-name/tasks.md` — never batch-mark at the end
-   - Show partial progress (`3/8`)
-   - Bump the tasks file version header
-   - If ambiguous or fails → pause and ask
-5. **Validate** against:
-   - Spec (meets requirements?)
-   - Stack (correct tech?)
-   - Constitution (respects rules?)
-   - Tests (run only the commands declared in `anya/stack.md`, if any)
-6. **Execute** `/anya-verify` automatically
-7. **Update** plan (mark spec complete, bump its version header)
-8. **Show** final progress
-9. **Review** user feedback before choosing the next increment; update affected
-   specs/plan instead of expanding scope silently
+3. **Execute** tasks in sequence, one at a time:
+   - **Start task:** Mark it `[/]` (in progress) immediately in `anya/specs/NNN-name/tasks.md`.
+   - **Code:** Implement the specific task changes cleanly.
+   - **Complete task:** Mark it `[x]` (completed) immediately in `tasks.md`.
+   - **Report:** Show real-time progress (e.g., `Task 2 completed. [3/6] Starting Task 3...`).
+   - Bump tasks file version header.
+   - If an error or ambiguity arises, pause immediately and ask.
+4. **Final Task Execution (Live Compilation & Test):**
+   - Run build/compilation check.
+   - Verify application starts cleanly with the command defined in `stack.md`.
+   - Run automated test command if declared in `stack.md`.
+5. **Run** `/anya-verify` automatically to evaluate verification levels and generate the live test guide.
+6. **Update** `anya/plan.md`:
+   - Mark spec complete: `✓ completed`.
+   - Bump plan version header.
+7. **Mandatory Verification Pause:**
+   - Present the **Guía de Prueba Interactiva en Vivo** generated by `anya-verify`.
+   - **HALT COMPLETELY:** Do not start or generate the next spec automatically. Wait for the user to try the app live and give approval.
 
-## Review Process (Mode 3)
+## Review Process (Diagnostic Mode)
 
-1. **Read** spec and tasks
-2. **Analyze** current implementation
-3. **Diagnose** in cascade:
-
-   | Level | Check | If Fails |
-   |-------|-------|----------|
-   | 1 | All tasks completed? | Complete missing tasks |
-   | 2 | Implementation meets spec? | Adjust implementation or update spec |
-   | 3 | Consistent with stack? | Refactor to use correct stack |
-   | 4 | Respects constitution? | Re-design functionality |
-
-4. **Propose** surgical solution (don't start from scratch)
-5. **Ask** how to proceed
-
-## Special Situations
-
-### Ambiguous Task
-```
-Task 3.1: Create POST /api/auth/login endpoint
-
-Spec says return JWT, but doesn't specify refresh token.
-
-Include refresh token? (yes/no)
-```
-
-### Task Error
-```
-✗ Task 2.1: Implement hashPassword
-
-Error: Can't install bcrypt
-
-Options:
-a) Use alternative: argon2
-b) Skip task, continue
-c) Stop, resolve manually
-
-What to do? (a/b/c)
-```
+1. **Read** spec, tasks, and implementation.
+2. **Diagnose** in cascade:
+   - Level 1: Are all tasks completed and marked `[x]`?
+   - Level 2: Does the vertical slice meet spec criteria?
+   - Level 3: Does the app compile and run cleanly?
+   - Level 4: Are stack and constitution rules respected?
+3. **Propose** surgical fix and ask how to proceed.

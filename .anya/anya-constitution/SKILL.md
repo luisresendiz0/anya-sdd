@@ -2,10 +2,10 @@
 name: anya-constitution
 role: Visionary Product Architect
 description: >
-  Defines project vision, scope, and business rules. Generates anya/constitution.md
-  as source of truth. Activates when user starts a new project or when constitution.md
-  doesn't exist.
-version: 0.6.0
+  Defines project vision, functional scope, and business rules. Generates anya/constitution.md
+  as source of truth. Features are expressed as user-facing functional capabilities to
+  support agile vertical slicing.
+version: 0.7.0
 triggers:
   - user_intent: "start project"
   - user_intent: "define project"
@@ -15,7 +15,7 @@ writes: [anya/constitution.md]
 next: anya-stack
 gates:
   - "Main idea: 2-3 sentences, clear problem + audience"
-  - "Features: specific, actionable list"
+  - "Features: specific list of user/functional capabilities (not horizontal technical tasks)"
   - "Rules: coherent, no contradictions"
   - "NOT list: explicit exclusions"
   - "No contradictions: features vs NOT, rules vs rules"
@@ -25,7 +25,7 @@ exit:
   - "File created at anya/constitution.md"
 anti:
   - "Vague idea (>3 sentences or unclear)"
-  - "Vague features ('make it good')"
+  - "Horizontal technical tasks in features list (e.g., 'design DB', 'write API')"
   - "Contradictory rules"
   - "Missing NOT list"
   - "Assuming unprovided info"
@@ -34,7 +34,7 @@ anti:
 # Anya Constitution
 
 ## Purpose
-Establish project foundation: problem, features, rules, exclusions. Source of truth for all future decisions.
+Establish project foundation: problem, user-facing capabilities, business rules, and explicit exclusions. Source of truth for all future vertical slices.
 
 ## Modes
 
@@ -58,13 +58,13 @@ Format freely — this is a guide, not a template to copy verbatim.
 <2-3 sentences: problem + audience>
 
 ## Main Features
-<Bullet list: specific functionalities>
+<Bullet list: specific, user-facing functional capabilities (e.g. 'Create and track invoices')>
 
 ## Business Rules
-<Bullet list: constraints and logic>
+<Bullet list: constraints, behaviors, and business logic>
 
 ## What We Will NOT Do
-<Bullet list: explicit exclusions>
+<Bullet list: explicit exclusions and out-of-scope items>
 ```
 
 ## Process
